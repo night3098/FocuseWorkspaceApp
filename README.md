@@ -22,7 +22,7 @@
 git clone https://github.com/night3098/FocuseWorkspaceApp
 cd FocuseWorkspaceApp
 bash build.sh
-bash FocuseApp.sh
+bash FocuseSpace.sh
 ```
 
 The compiled program is located at the path FocuseWorkspaceApp/src/FocuseApp/FocuseSpace
