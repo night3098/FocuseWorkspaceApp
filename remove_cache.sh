@@ -17,4 +17,8 @@ rm src/FocuseSpace/ui_mainwindow.h
 rm src/FocuseSpace/ui_notes.h
 rm src/FocuseSpace/ui_pomodoro.h
 rm src/FocuseSpace/ui_tasks.h
+rm src/FocuseSpace/moc_mainwindow.cpp
+rm src/FocuseSpace/moc_notes.cpp
+rm src/FocuseSpace/moc_pomodoro.cpp
+rm src/FocuseSpace/moc_tasks.cpp
 echo "OK"
