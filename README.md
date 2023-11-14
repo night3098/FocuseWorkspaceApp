@@ -1,5 +1,4 @@
-<h1 align="center">Cubes</h1>
-<p align="center">Simple geometry game</p>
+<h1 align="center">Focuse Workspace</h1>
 <br>
 
 <div class="badges" align="center">
@@ -8,12 +7,13 @@
 </div>
 <br>
 <div class"screenshots" align="center">
-    <img align="left" src="screenshots/3.png"></img>
-    <img align="right" src="screenshots/2.png"></img>
-    <img align="left" src="screenshots/1.png"></img>
-    <img align="right" src="screenshots/4.png"></img>
+    <img src="screenshots/3.png"></img>
+    <img src="screenshots/4.png"></img>
+    <img src="screenshots/1.png"></img>
+    <img src="screenshots/2.png"></img>
 </div>
 <br>
+
 <h1 align="center">Installing</h1>
 
 <a href=""><p align="center">!!! For the app to work, you need to install QT !!!</a></p>
