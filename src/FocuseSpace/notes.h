@@ -30,6 +30,8 @@ private:
     QLabel *title;
     QTextEdit *noteEdit;
     QListWidget *notesList;
+    QLineEdit *noteName;
+
 
     QPushButton *saveButton;
     QPushButton *editButton;
