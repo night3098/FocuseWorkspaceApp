@@ -137,7 +137,9 @@ void Pomodoro::change() {
 
 void Pomodoro::toMainWindow() {
     close();
+    /*
     MainWindow *mainWindow = new MainWindow(this);
     mainWindow->setWindowIcon(QIcon("images/home.svg"));
     mainWindow->show();
+    */
 }

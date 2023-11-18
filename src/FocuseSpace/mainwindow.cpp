@@ -57,7 +57,7 @@ void MainWindow::openNotesWin() {
 }
 
 void MainWindow::openPomodoroWin() {
-    hide();
+    //hide();
     pomodoro_window = new Pomodoro(this);
     pomodoro_window->setWindowIcon(QIcon("images/pomodoro.svg"));
     pomodoro_window->show();
