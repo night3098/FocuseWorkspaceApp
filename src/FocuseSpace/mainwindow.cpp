@@ -16,7 +16,6 @@ MainWindow::MainWindow(QMainWindow *parent)
     titleMain->setFont(QFont("SF Pro Black", 30));
     titleMain->setStyleSheet( " color: #ffffff; " );
 
-    //======================================================================================================================================
     openTasks = new QPushButton("TASKS", this);
     openTasks->setGeometry(50, 150, 300, 40);
     openTasks->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
@@ -24,7 +23,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 
     connect(openTasks, SIGNAL(clicked()), this, SLOT(openTasksWin()));
 
-    //======================================================================================================================================
     openNotes = new QPushButton("NOTES", this);
     openNotes->setGeometry(50, 200, 300, 40);
     openNotes->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
@@ -32,7 +30,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 
     connect(openNotes, SIGNAL(clicked()), this, SLOT(openNotesWin()));
 
-    //======================================================================================================================================
     openTimer = new QPushButton("POMODORO", this);
     openTimer->setGeometry(50, 250, 300, 40);
     openTimer->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );

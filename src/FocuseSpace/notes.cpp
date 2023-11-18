@@ -29,7 +29,7 @@ Notes::Notes(QMainWindow *parent) :
     notesList = new QListWidget(this);
     notesList->setGeometry(20, 80, 240, 500);
     notesList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    notesList->setFont(QFont("SF Pro Black", 15));
+    notesList->setFont(QFont("SF Pro Black", 9));
 
     saveButton = new QPushButton("SAVE", this);
     saveButton->setGeometry(605, 595, 175, 40);
