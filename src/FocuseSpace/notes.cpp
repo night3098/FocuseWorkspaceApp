@@ -60,6 +60,7 @@ Notes::Notes(QMainWindow *parent) :
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
 }
 
+
 Notes::~Notes() {
     delete ui;
 }
