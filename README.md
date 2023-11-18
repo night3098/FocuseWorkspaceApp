@@ -7,10 +7,7 @@
 </div>
 <br>
 <div class"screenshots" align="center">
-    <img src="screenshots/3.png"></img>
-    <img src="screenshots/4.png"></img>
-    <img src="screenshots/1.png"></img>
-    <img src="screenshots/2.png"></img>
+    <img src="image.png"></img>
 </div>
 <br>
 

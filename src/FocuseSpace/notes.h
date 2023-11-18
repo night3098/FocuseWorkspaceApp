@@ -2,6 +2,11 @@
 #define NOTES_H
 
 #include <QMainWindow>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QListWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notes; }
@@ -16,8 +21,21 @@ public:
     ~Notes();
 
 private slots:
+    void toMainWindow();
+    void saveNotes();
+    void removeNote();
+    void editNote();
 
 private:
+    QLabel *title;
+    QTextEdit *noteEdit;
+    QListWidget *notesList;
+
+    QPushButton *saveButton;
+    QPushButton *editButton;
+    QPushButton *backButton;
+    QPushButton *removeButton;
+
     Ui::Notes *ui;
     Notes *notes;
 };
