@@ -12,7 +12,7 @@ Pomodoro::Pomodoro(QMainWindow *parent) :
     QMainWindow(parent) {
         
     setWindowTitle("~ pomodoro ~");
-    setFixedSize(250, 235);
+    setFixedSize(250, 225);
 
     titleLabel = new QLabel("POMODORO", this);
     titleLabel->setGeometry(0, 20, 250, 50);
@@ -21,7 +21,7 @@ Pomodoro::Pomodoro(QMainWindow *parent) :
     titleLabel->setStyleSheet( " color: #ffffff; " );
 
     progressBar = new QProgressBar(this);
-    progressBar->setGeometry(10, 95, 230, 30);
+    progressBar->setGeometry(10, 85, 230, 40);
     progressBar->setStyleSheet( "color: #ffffff; selection-color: #000000; gridline-color: #303030; background-color: #303030; selection-background-color: #ffffff;" );
     progressBar->setFont(QFont("SF Pro Black", 12));
 
@@ -29,29 +29,28 @@ Pomodoro::Pomodoro(QMainWindow *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
 
     startButton = new QPushButton("START", this);
-    startButton->setGeometry(10, 130, 100, 30);
-    startButton->setStyleSheet( " background-color: #303030; color: #ffffff; border-color: #303030; alternate-background-color: #303030;" );
+    startButton->setGeometry(10, 130, 110, 40);
+    startButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     startButton->setFont(QFont("SF Pro Black", 12));
     connect(startButton, SIGNAL(clicked()), this, SLOT(startPomodoro()));
 
     stopButton = new QPushButton("STOP", this);
-    stopButton->setGeometry(140, 130, 100, 30);
-    stopButton->setStyleSheet( " background-color: #303030; color: #ffffff; border-color: #303030; alternate-background-color: #303030;" );
+    stopButton->setGeometry(130, 130, 110, 40);
+    stopButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     stopButton->setFont(QFont("SF Pro Black", 12));
     connect(stopButton, SIGNAL(clicked()), timer, SLOT(stop()));
 
     changeButton = new QPushButton("CHANGE", this);
-    changeButton->setGeometry(10, 165, 230, 30);
-    changeButton->setStyleSheet( " background-color: #303030; color: #ffffff; border-color: #303030; alternate-background-color: #303030;" );
+    changeButton->setGeometry(10, 175, 110, 40);
+    changeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     changeButton->setFont(QFont("SF Pro Black", 12));
     connect(changeButton, SIGNAL(clicked()), this, SLOT(change()));
 
     backButton = new QPushButton("BACK", this);
-    backButton->setGeometry(10, 200, 230, 30);
-    backButton->setStyleSheet( " background-color: #303030; color: #ffffff; border-color: #303030; alternate-background-color: #303030;" );
+    backButton->setGeometry(130, 175, 110, 40);
+    backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     backButton->setFont(QFont("SF Pro Black", 12));
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
-
 
     timeLeft = 25 * 60;
     isPomodoro = true;

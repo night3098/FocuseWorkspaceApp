@@ -14,14 +14,18 @@ public:
 
 private slots:
     void addTask();
-    void removeTask();\
+    void moveTask();
     void toMainWindow();
+    void removeTask();
+    void removeDone();
 
 private:
-    QLabel *winTitle;
     QListWidget *taskList;
+    QListWidget *doneList;
+    QLabel *winTitle;
     QLineEdit *taskInput;
     QPushButton *addButton;
     QPushButton *removeButton;
+    QPushButton *clearTask;
     QPushButton *backButton;
 };

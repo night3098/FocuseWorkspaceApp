@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QListWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notes; }
@@ -21,10 +22,14 @@ public:
 
 private slots:
     void toMainWindow();
-    
+    void saveNotes();
+    void removeNote();
+    void editNote();
+
 private:
     QLabel *title;
     QTextEdit *noteEdit;
+    QListWidget *notesList;
 
     QPushButton *saveButton;
     QPushButton *editButton;
