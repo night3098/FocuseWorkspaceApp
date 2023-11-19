@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QTextEdit>
 #include <QMainWindow>
+#include <QListWidgetItem>
 #include <QListWidget>
 #include <QDebug>
 
@@ -33,7 +34,8 @@ Notes::Notes(QMainWindow *parent) :
     notesList = new QListWidget(this);
     notesList->setGeometry(20, 80, 240, 570);
     notesList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    notesList->setFont(QFont("SF Pro Black", 9));
+    notesList->setFont(QFont("SF Pro Black", 7));
+    connect(notesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(doubleClick(QListWidgetItem*)));
 
     saveButton = new QPushButton("SAVE", this);
     saveButton->setGeometry(605, 665, 175, 40);
@@ -41,14 +43,8 @@ Notes::Notes(QMainWindow *parent) :
     saveButton->setFont(QFont("SF Pro Black", 10));
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNotes()));
 
-    editButton = new QPushButton("EDIT", this);
-    editButton->setGeometry(20, 665, 175, 40);
-    editButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
-    editButton->setFont(QFont("SF Pro Black", 10));
-    connect(editButton, SIGNAL(clicked()), this, SLOT(editNote()));
-
     backButton = new QPushButton("BACK", this);
-    backButton->setGeometry(215, 665, 175, 40);
+    backButton->setGeometry(20, 665, 365, 40);
     backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     backButton->setFont(QFont("SF Pro Black", 10));
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
@@ -73,21 +69,32 @@ void Notes::toMainWindow() {
 }
 
 void Notes::saveNotes() {
-    QString note = noteEdit->toPlainText();
-    if (!note.isEmpty()) {
-        qDebug() << note;
+    QString text = noteEdit->toPlainText();
+    QString title = noteName->text();
+
+    if (!title.isEmpty() && !text.isEmpty()) {
+        qDebug() << title;
+        QString note = title + " : " + text;
         notesList->addItem(note);
+
         noteEdit->clear();
+        noteName->clear();
     }
 }
 
-void Notes::removeNote() {
-    qDeleteAll(notesList->selectedItems());
+void Notes::doubleClick(QListWidgetItem *item) {
+    QString note = item->text();
+    QStringList parts = note.split(": ");
+
+    if (parts.size() == 2) {
+        noteName->setText(parts[0]);
+        noteEdit->setPlainText(parts[1]);
+
+        delete notesList->takeItem(notesList->row(item));
+    }
 }
 
-void Notes::editNote() {
-    QListWidgetItem *selectedItem = notesList->currentItem();
-    QString itemText = selectedItem->text();
-    noteEdit->append(itemText);
+
+void Notes::removeNote() {
     qDeleteAll(notesList->selectedItems());
 }
