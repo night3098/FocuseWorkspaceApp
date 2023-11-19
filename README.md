@@ -2,7 +2,8 @@
 
 ![c++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white "c++")
 ![qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white "qt")
-![APP](image.png "APP")
+![image](https://github.com/night3098/FocuseWorkspaceApp/assets/134074263/342a1f56-8958-4852-a9a1-a46441037bbf)
+
 
 # INSTALLING
 
