@@ -61,7 +61,7 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     addButton->setGeometry(530, 540, 100, 40);
     connect(addButton, SIGNAL(clicked()), this, SLOT(addTask()));
 
-    removeButton = new QPushButton("CLEAR", this);
+    removeButton = new QPushButton("REMOVE", this);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     removeButton->setFont(QFont("SF Pro Black", 10));
     removeButton->setGeometry(650, 540, 100, 40);

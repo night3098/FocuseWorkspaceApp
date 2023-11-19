@@ -24,7 +24,7 @@ private slots:
     void toMainWindow();
     void saveNotes();
     void removeNote();
-    void editNote();
+    void doubleClick(QListWidgetItem*);
 
 private:
     QLabel *title;
@@ -34,7 +34,6 @@ private:
 
 
     QPushButton *saveButton;
-    QPushButton *editButton;
     QPushButton *backButton;
     QPushButton *removeButton;
 

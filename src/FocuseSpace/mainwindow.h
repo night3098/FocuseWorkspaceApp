@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLabel>
+#include <QtSql/QSqlDatabase>
 #include "notes.h"
 #include "pomodoro.h"
 #include "tasks.h"
@@ -31,6 +32,7 @@ private:
     QPushButton *openNotes;
     QPushButton *openTimer;
     QPushButton *closeWindow;
+    QLabel *imageLabel;
     Tasks *tasks_window;
     Notes *notes_window;
     Pomodoro *pomodoro_window;
