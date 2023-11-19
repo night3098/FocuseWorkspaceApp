@@ -8,6 +8,7 @@
 
 ### !!! For the app to work, you need to install QT !!!
 
+
 ```
 git clone https://github.com/night3098/FocuseWorkspaceApp
 cd FocuseWorkspaceApp
