@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QWidget>
 #include <QMainWindow>
+#include <QtSql/QSqlDatabase>
+
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent)

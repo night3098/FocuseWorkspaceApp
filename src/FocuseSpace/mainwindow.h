@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLabel>
+#include <QtSql/QSqlDatabase>
 #include "notes.h"
 #include "pomodoro.h"
 #include "tasks.h"
