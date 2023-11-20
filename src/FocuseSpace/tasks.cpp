@@ -22,12 +22,12 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     taskList = new QListWidget(this);
     taskList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #600900; alternate-background-color: #600900;" );
     taskList->setGeometry(50, 100, 340, 360);
-    taskList->setFont(QFont("SF Pro Black", 15));
+    taskList->setFont(QFont("SF Pro Black", 12));
 
     doneList = new QListWidget(this);
     doneList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #006018; alternate-background-color: #303030;" );
     doneList->setGeometry(410, 100, 340, 360);
-    doneList->setFont(QFont("SF Pro Black", 15));
+    doneList->setFont(QFont("SF Pro Black", 12));
 
     taskInput = new QLineEdit(this);
     taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );

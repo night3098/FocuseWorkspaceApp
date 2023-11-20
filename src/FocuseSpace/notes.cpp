@@ -23,12 +23,13 @@ Notes::Notes(QMainWindow *parent) :
 
     noteName = new QLineEdit(this);
     noteName->setGeometry(280, 80, 500, 50);
+    noteName->setFont(QFont("SF Pro Black", 15));
     noteName->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
 
     noteEdit = new QTextEdit(this);
     noteEdit->setGeometry(280, 150, 500, 500);
     noteEdit->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    noteEdit->setFont(QFont("SF Pro Black", 15));
+    noteEdit->setFont(QFont("SF Pro Black", 12));
     //noteEdit->toMarkdown();
 
     notesList = new QListWidget(this);
