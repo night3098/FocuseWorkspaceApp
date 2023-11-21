@@ -8,12 +8,24 @@
 #include <QListWidgetItem>
 #include <QListWidget>
 #include <QDebug>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 Notes::Notes(QMainWindow *parent) :
     QMainWindow(parent)
 {
     setWindowTitle("~ notes ~");
     setFixedSize(800, 720);
+
+    notesdb = QSqlDatabase::addDatabase("QSQLITE");
+    notesdb.setDatabaseName("../notes.db");
+
+    if(notesdb.open()) {
+        qDebug() << "OK" << notesdb.databaseName();
+    }
+    else{
+        qDebug() << "Error [TASKS DB] -> " << notesdb.lastError();
+    }
 
     title = new QLabel("Notes", this);
     title->setGeometry(0, 20, 800, 50);
@@ -64,6 +76,9 @@ Notes::~Notes() {
 }
 
 void Notes::toMainWindow() {
+    QSqlDatabase::database().close();
+    QSqlDatabase::removeDatabase("QSQLITE");
+
     close();
     MainWindow *mainWindow = new MainWindow(this);
     mainWindow->setWindowIcon(QIcon("images/home.svg"));

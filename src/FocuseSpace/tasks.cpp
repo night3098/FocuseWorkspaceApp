@@ -7,12 +7,25 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidgetItem>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QDebug>
 
-Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent) 
+Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 {
     setWindowTitle("~ tasks ~");
     setFixedSize(800, 600);
     
+    tasksdb = QSqlDatabase::addDatabase("QSQLITE");
+    tasksdb.setDatabaseName("../tasks.db");
+
+    if(tasksdb.open()) {
+        qDebug() << "OK" << tasksdb.databaseName();
+    }
+    else{
+        qDebug() << "Error [TASKS DB] -> " << tasksdb.lastError();
+    }
+
     winTitle = new QLabel("TASKS", this);
     winTitle->setGeometry(0, 30, 800, 60);
     winTitle->setAlignment(Qt::AlignCenter);
@@ -90,6 +103,9 @@ void Tasks::removeDone() {
 }
 
 void Tasks::toMainWindow() {
+    QSqlDatabase::database().close();
+    QSqlDatabase::removeDatabase("QSQLITE");
+
     close();
     MainWindow *mainWindow = new MainWindow(this);
     mainWindow->setWindowIcon(QIcon("images/home.svg"));

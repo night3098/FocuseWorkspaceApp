@@ -5,6 +5,8 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QLineEdit>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 class Tasks : public QMainWindow {
     Q_OBJECT
@@ -24,6 +26,8 @@ private:
     QListWidget *doneList;
     QLabel *winTitle;
     QLineEdit *taskInput;
+    QSqlDatabase tasksdb;
+
     QPushButton *addButton;
     QPushButton *removeButton;
     QPushButton *clearTask;

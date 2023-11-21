@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QtSql/QSqlDatabase>
 #include <QPixmap>
+#include <QSqlDatabase>
+#include <QSqlError>
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent)
 {
-    //code
+
     setWindowTitle(" ~ focuse space ~ ");
     setFixedSize(700, 350);
 
