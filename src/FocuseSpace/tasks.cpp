@@ -34,8 +34,7 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     taskInput->setFont(QFont("SF Pro Black", 15));
     taskInput->setGeometry(50, 480, 700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
-
-
+    taskInput->setPlaceholderText("Task");
 
     removeButton = new QPushButton("DONE", this);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
