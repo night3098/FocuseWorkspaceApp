@@ -10,21 +10,28 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QDebug>
+#include <QSqlRecord>
 
 Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 {
+    QSqlQuery query;
+    QString str = "CREATE TABLE tasks ( "
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "done VARCHAR(300),"
+                  "process VARCHAR (300)"
+                  ");";
+
+    if (!query.exec(str)) {
+        qDebug() << "Невозможно создать таблицу tasks, либо она уже создана";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Таблица tasks создана";
+    }
+
+
     setWindowTitle("~ tasks ~");
     setFixedSize(800, 600);
-    
-    tasksdb = QSqlDatabase::addDatabase("QSQLITE");
-    tasksdb.setDatabaseName("../tasks.db");
-
-    if(tasksdb.open()) {
-        qDebug() << "OK" << tasksdb.databaseName();
-    }
-    else{
-        qDebug() << "Error [TASKS DB] -> " << tasksdb.lastError();
-    }
 
     winTitle = new QLabel("TASKS", this);
     winTitle->setGeometry(0, 30, 800, 60);
@@ -81,15 +88,26 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 }
 
 void Tasks::addTask() {
+    QSqlQuery query;
+
     QString task = taskInput->text();
     if (!task.isEmpty()) {
         taskList->addItem(task);
         taskInput->clear();
     }
+    QString saveTask = "INSERT INTO tasks (process) VALUES('"+task+"');";
+
+    if(!query.exec(saveTask)) {
+        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+    }
+    else {
+        qDebug() << "Запись добавлена";
+    }
 }
 
 void Tasks::moveTask() {
     QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
+    QString done = item->text();
     doneList->addItem(item);
 }
 
@@ -103,11 +121,8 @@ void Tasks::removeDone() {
 }
 
 void Tasks::toMainWindow() {
-    QSqlDatabase::database().close();
-    QSqlDatabase::removeDatabase("QSQLITE");
-
     close();
     MainWindow *mainWindow = new MainWindow(this);
-    mainWindow->setWindowIcon(QIcon("images/home.svg"));
+    mainWindow->setWindowIcon(QIcon("../images/home.svg"));
     mainWindow->show();
 }

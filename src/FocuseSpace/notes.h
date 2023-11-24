@@ -33,7 +33,6 @@ private:
     QTextEdit *noteEdit;
     QListWidget *notesList;
     QLineEdit *noteName;
-    QSqlDatabase notesdb;
 
     QPushButton *saveButton;
     QPushButton *backButton;

@@ -10,22 +10,30 @@
 #include <QDebug>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
 
 Notes::Notes(QMainWindow *parent) :
     QMainWindow(parent)
 {
+
+    QSqlQuery query;
+    QString str = "CREATE TABLE notes ( "
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "name VARCHAR(100),"
+                  "text VARCHAR(999999999)"
+                  ");";
+
+    if (!query.exec(str)) {
+        qDebug() << "Невозможно создать таблицу notes, либо она уже создана";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Таблица notes создана";
+    }
+
     setWindowTitle("~ notes ~");
     setFixedSize(800, 720);
-
-    notesdb = QSqlDatabase::addDatabase("QSQLITE");
-    notesdb.setDatabaseName("../notes.db");
-
-    if(notesdb.open()) {
-        qDebug() << "OK" << notesdb.databaseName();
-    }
-    else{
-        qDebug() << "Error [TASKS DB] -> " << notesdb.lastError();
-    }
 
     title = new QLabel("Notes", this);
     title->setGeometry(0, 20, 800, 50);
@@ -76,27 +84,33 @@ Notes::~Notes() {
 }
 
 void Notes::toMainWindow() {
-    QSqlDatabase::database().close();
-    QSqlDatabase::removeDatabase("QSQLITE");
-
     close();
     MainWindow *mainWindow = new MainWindow(this);
-    mainWindow->setWindowIcon(QIcon("images/home.svg"));
+    mainWindow->setWindowIcon(QIcon("../images/home.svg"));
     mainWindow->show();
 }
 
 void Notes::saveNotes() {
+    QSqlQuery query;
+
     QString text = noteEdit->toPlainText();
     QString title = noteName->text();
 
-    if (!title.isEmpty() && !text.isEmpty()) {
-        qDebug() << title;
-        QString note = title + " : " + text;
-        notesList->addItem(note);
+    qDebug() << title;
+    QString note = title + " : " + text;
+    notesList->addItem(note);
 
-        noteEdit->clear();
-        noteName->clear();
+    QString saveNote = "INSERT INTO notes (name, text) VALUES('"+title+"', '"+text+"');";
+
+    if(!query.exec(saveNote)) {
+        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
     }
+    else {
+        qDebug() << "Запись добавлена";
+    }
+
+    noteEdit->clear();
+    noteName->clear();
 }
 
 void Notes::doubleClick(QListWidgetItem *item) {

@@ -10,7 +10,6 @@
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent)
 {
-
     setWindowTitle(" ~ focuse space ~ ");
     setFixedSize(700, 350);
 
@@ -54,20 +53,20 @@ MainWindow::~MainWindow()
 void MainWindow::openTasksWin() {
     hide();
     tasks_window = new Tasks(this);
-    tasks_window->setWindowIcon(QIcon("images/tasks.svg"));
+    tasks_window->setWindowIcon(QIcon("../images/tasks.svg"));
     tasks_window->show();
 }
 
 void MainWindow::openNotesWin() {
     hide();
     notes_window = new Notes(this);
-    notes_window->setWindowIcon(QIcon("images/notes.svg"));
+    notes_window->setWindowIcon(QIcon("../images/notes.svg"));
     notes_window->show();
 }
 
 void MainWindow::openPomodoroWin() {
     //hide();
     pomodoro_window = new Pomodoro(this);
-    pomodoro_window->setWindowIcon(QIcon("images/pomodoro.svg"));
+    pomodoro_window->setWindowIcon(QIcon("../images/pomodoro.svg"));
     pomodoro_window->show();
 }
