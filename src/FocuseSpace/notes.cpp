@@ -91,26 +91,32 @@ void Notes::toMainWindow() {
 }
 
 void Notes::saveNotes() {
-    QSqlQuery query;
-
     QString text = noteEdit->toPlainText();
-    QString title = noteName->text();
+    if(!text.isEmpty()) {
+        QSqlQuery query;
 
-    qDebug() << title;
-    QString note = title + " : " + text;
-    notesList->addItem(note);
+        QString title = noteName->text();
 
-    QString saveNote = "INSERT INTO notes (name, text) VALUES('"+title+"', '"+text+"');";
+        qDebug() << title;
+        QString note = title + " : " + text;
+        notesList->addItem(note);
 
-    if(!query.exec(saveNote)) {
-        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+        QString exec = "INSERT INTO notes (name, text) VALUES('"+title+"', '"+text+"');";
+
+        if(!query.exec(exec)) {
+            qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+            qDebug() << query.lastError();
+        }
+        else {
+            qDebug() << "Запись добавлена";
+        }
+
+        noteEdit->clear();
+        noteName->clear();
     }
     else {
-        qDebug() << "Запись добавлена";
+        qDebug() << "Note is empty";
     }
-
-    noteEdit->clear();
-    noteName->clear();
 }
 
 void Notes::doubleClick(QListWidgetItem *item) {
@@ -127,5 +133,12 @@ void Notes::doubleClick(QListWidgetItem *item) {
 
 
 void Notes::removeNote() {
-    qDeleteAll(notesList->selectedItems());
+    QSqlQuery query;
+    //qDeleteAll(notesList->selectedItems());
+    if(!query.exec("SELECT * FROM notes;")) {
+        qDebug() << query.lastError();
+    }
+    else{
+        qDebug() << "OK";
+    }
 }

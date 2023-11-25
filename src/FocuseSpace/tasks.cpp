@@ -14,14 +14,28 @@
 
 Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 {
-    QSqlQuery query;
-    QString str = "CREATE TABLE tasks ( "
+// DATABASE
+
+    QString str = "CREATE TABLE donetasks ( "
                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                  "done VARCHAR(300),"
-                  "process VARCHAR (300)"
+                  "task VARCHAR(300)"
                   ");";
 
     if (!query.exec(str)) {
+        qDebug() << "Невозможно создать таблицу donetasks, либо она уже создана";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Таблица donetasks создана";
+    }
+
+
+    QString str2 = "CREATE TABLE tasks ( "
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "task VARCHAR (300)"
+                  ");";
+
+    if (!query.exec(str2)) {
         qDebug() << "Невозможно создать таблицу tasks, либо она уже создана";
         qDebug() << query.lastError();
     }
@@ -30,6 +44,7 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     }
 
 
+// UI
     setWindowTitle("~ tasks ~");
     setFixedSize(800, 600);
 
@@ -87,18 +102,17 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
 }
 
+// FUNCTIONAL
 void Tasks::addTask() {
-    QSqlQuery query;
-
     QString task = taskInput->text();
     if (!task.isEmpty()) {
         taskList->addItem(task);
         taskInput->clear();
     }
-    QString saveTask = "INSERT INTO tasks (process) VALUES('"+task+"');";
 
-    if(!query.exec(saveTask)) {
+    if(!query.exec("INSERT INTO tasks (task) VALUES('"+task+"');")) {
         qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+        qDebug() << query.lastError();
     }
     else {
         qDebug() << "Запись добавлена";
@@ -109,6 +123,14 @@ void Tasks::moveTask() {
     QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
     QString done = item->text();
     doneList->addItem(item);
+
+    if(!query.exec("INSERT INTO donetasks (task) VALUES('"+done+"');")) {
+        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Запись добавлена";
+    }
 }
 
 void Tasks::removeTask() {
@@ -116,8 +138,8 @@ void Tasks::removeTask() {
 }
 
 void Tasks::removeDone() {
-    //qDeleteAll(doneList->selectedItems());
-    doneList->clear();
+    qDeleteAll(doneList->selectedItems());
+    //doneList->clear();
 }
 
 void Tasks::toMainWindow() {

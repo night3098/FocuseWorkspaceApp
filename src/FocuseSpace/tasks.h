@@ -27,6 +27,7 @@ private:
     QListWidget *doneList;
     QLabel *winTitle;
     QLineEdit *taskInput;
+    QSqlQuery query;
 
     QPushButton *addButton;
     QPushButton *removeButton;
