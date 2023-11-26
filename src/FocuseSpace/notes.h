@@ -9,6 +9,7 @@
 #include <QListWidget>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QStatusBar>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notes; }

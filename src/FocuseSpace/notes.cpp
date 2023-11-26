@@ -76,6 +76,20 @@ Notes::Notes(QMainWindow *parent) :
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     removeButton->setFont(QFont("SF Pro Black", 10));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
+
+
+    query.exec("SELECT * FROM notes");
+    while (query.next()) {
+        int id = query.value("id").toInt();
+        QString name = query.value("name").toString();
+        QString text = query.value("text").toString();
+
+        QString note = name + text;
+
+        QListWidgetItem *item = new QListWidgetItem(note);
+        item->setData(Qt::UserRole, id);
+        notesList->addItem(item);
+    }
 }
 
 
@@ -96,12 +110,11 @@ void Notes::saveNotes() {
         QSqlQuery query;
 
         QString title = noteName->text();
-
         qDebug() << title;
         QString note = title + " : " + text;
-        notesList->addItem(note);
+        QString nnnn = title + " : ";
 
-        QString exec = "INSERT INTO notes (name, text) VALUES('"+title+"', '"+text+"');";
+        QString exec = "INSERT INTO notes (name, text) VALUES('"+nnnn+"', '"+text+"');";
 
         if(!query.exec(exec)) {
             qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
@@ -111,8 +124,14 @@ void Notes::saveNotes() {
             qDebug() << "Запись добавлена";
         }
 
+        int id = query.lastInsertId().toInt();
+
         noteEdit->clear();
         noteName->clear();
+
+        QListWidgetItem *item = new QListWidgetItem(note);
+        item->setData(Qt::UserRole, id);
+        notesList->addItem(item);
     }
     else {
         qDebug() << "Note is empty";
@@ -120,25 +139,42 @@ void Notes::saveNotes() {
 }
 
 void Notes::doubleClick(QListWidgetItem *item) {
-    QString note = item->text();
-    QStringList parts = note.split(": ");
+    QSqlQuery query;
+
+    QListWidgetItem *selectedItem = notesList->currentItem();
+    int id = selectedItem->data(Qt::UserRole).toInt();
+    
+    QString note = selectedItem->text();
+    QStringList parts = note.split(" : ");
 
     if (parts.size() == 2) {
+        query.bindValue("id", id);
+        query.prepare("DELETE FROM notes WHERE id = id");
+        
         noteName->setText(parts[0]);
         noteEdit->setPlainText(parts[1]);
 
-        delete notesList->takeItem(notesList->row(item));
+        if (query.exec()) {
+            delete notesList->takeItem(notesList->row(item));
+        } else {
+            qDebug() << "Error deleting data:" << query.lastError().text();
+        }
     }
 }
 
 
 void Notes::removeNote() {
     QSqlQuery query;
-    //qDeleteAll(notesList->selectedItems());
-    if(!query.exec("SELECT * FROM notes;")) {
-        qDebug() << query.lastError();
-    }
-    else{
-        qDebug() << "OK";
+    
+    QListWidgetItem *selectedItem = notesList->currentItem();
+    int id = selectedItem->data(Qt::UserRole).toInt();
+
+    query.bindValue("id", id);
+    query.prepare("DELETE FROM notes WHERE id = id");
+
+    if (query.exec()) {
+        delete selectedItem;
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
     }
 }
