@@ -21,5 +21,5 @@ rm src/FocuseSpace/moc_mainwindow.cpp
 rm src/FocuseSpace/moc_notes.cpp
 rm src/FocuseSpace/moc_pomodoro.cpp
 rm src/FocuseSpace/moc_tasks.cpp
-rm src/FocuseSpace/data
+rm src/FocuseSpace/data.db
 echo "OK"
