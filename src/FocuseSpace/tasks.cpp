@@ -7,12 +7,47 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidgetItem>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QDebug>
+#include <QSqlRecord>
 
-Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent) 
+Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 {
+// DATABASE
+
+    QString str = "CREATE TABLE donetasks ( "
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "task VARCHAR(300)"
+                  ");";
+
+    if (!query.exec(str)) {
+        qDebug() << "Невозможно создать таблицу donetasks, либо она уже создана";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Таблица donetasks создана";
+    }
+
+
+    QString str2 = "CREATE TABLE tasks ( "
+                  "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                  "task VARCHAR (300)"
+                  ");";
+
+    if (!query.exec(str2)) {
+        qDebug() << "Невозможно создать таблицу tasks, либо она уже создана";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Таблица tasks создана";
+    }
+
+
+// UI
     setWindowTitle("~ tasks ~");
     setFixedSize(800, 600);
-    
+
     winTitle = new QLabel("TASKS", this);
     winTitle->setGeometry(0, 30, 800, 60);
     winTitle->setAlignment(Qt::AlignCenter);
@@ -22,20 +57,19 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     taskList = new QListWidget(this);
     taskList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #600900; alternate-background-color: #600900;" );
     taskList->setGeometry(50, 100, 340, 360);
-    taskList->setFont(QFont("SF Pro Black", 15));
+    taskList->setFont(QFont("SF Pro Black", 12));
 
     doneList = new QListWidget(this);
     doneList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #006018; alternate-background-color: #303030;" );
     doneList->setGeometry(410, 100, 340, 360);
-    doneList->setFont(QFont("SF Pro Black", 15));
+    doneList->setFont(QFont("SF Pro Black", 12));
 
     taskInput = new QLineEdit(this);
     taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     taskInput->setFont(QFont("SF Pro Black", 15));
     taskInput->setGeometry(50, 480, 700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
-
-
+    taskInput->setPlaceholderText("Task");
 
     removeButton = new QPushButton("DONE", this);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
@@ -66,33 +100,100 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     removeButton->setFont(QFont("SF Pro Black", 10));
     removeButton->setGeometry(650, 540, 100, 40);
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
+
+    query.exec("SELECT * FROM tasks");
+    while (query.next()) {
+        int id = query.value("id").toInt();
+        QString text = query.value("task").toString();
+
+        QListWidgetItem *item = new QListWidgetItem(text);
+        item->setData(Qt::UserRole, id);
+        taskList->addItem(item);
+    }
+
+    query.exec("SELECT * FROM donetasks");
+    while (query.next()) {
+        int id = query.value("id").toInt();
+        QString text = query.value("task").toString();
+
+        QListWidgetItem *item = new QListWidgetItem(text);
+        item->setData(Qt::UserRole, id);
+        doneList->addItem(item);
+    }
 }
 
+// FUNCTIONAL
 void Tasks::addTask() {
     QString task = taskInput->text();
     if (!task.isEmpty()) {
         taskList->addItem(task);
         taskInput->clear();
     }
+
+    if(!query.exec("INSERT INTO tasks (task) VALUES('"+task+"');")) {
+        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Запись добавлена";
+    }
 }
 
 void Tasks::moveTask() {
     QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
+    QString done = item->text();
     doneList->addItem(item);
+
+    if(!query.exec("INSERT INTO donetasks (task) VALUES('"+done+"');")) {
+        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
+        qDebug() << query.lastError();
+    }
+    else {
+        qDebug() << "Запись добавлена";
+    }
+
+    QString task = item->text();
+
+    query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << "Ok";
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+    }
 }
 
 void Tasks::removeTask() {
-    qDeleteAll(taskList->selectedItems());
+    QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
+
+    QString task = item->text();
+
+    query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << "Ok";
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+    }
 }
 
 void Tasks::removeDone() {
-    //qDeleteAll(doneList->selectedItems());
-    doneList->clear();
+    QListWidgetItem *item = doneList->takeItem(doneList->currentRow());
+
+    QString task = item->text();
+
+    query.prepare("DELETE FROM donetasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << "Ok";
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+    }
 }
 
 void Tasks::toMainWindow() {
     close();
     MainWindow *mainWindow = new MainWindow(this);
-    mainWindow->setWindowIcon(QIcon("images/home.svg"));
+    mainWindow->setWindowIcon(QIcon("../images/home.svg"));
     mainWindow->show();
 }

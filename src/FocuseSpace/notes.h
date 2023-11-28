@@ -7,6 +7,9 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QListWidget>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QStatusBar>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notes; }
@@ -31,7 +34,6 @@ private:
     QTextEdit *noteEdit;
     QListWidget *notesList;
     QLineEdit *noteName;
-
 
     QPushButton *saveButton;
     QPushButton *backButton;
