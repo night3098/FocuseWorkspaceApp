@@ -100,6 +100,26 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     removeButton->setFont(QFont("SF Pro Black", 10));
     removeButton->setGeometry(650, 540, 100, 40);
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
+
+    query.exec("SELECT * FROM tasks");
+    while (query.next()) {
+        int id = query.value("id").toInt();
+        QString text = query.value("task").toString();
+
+        QListWidgetItem *item = new QListWidgetItem(text);
+        item->setData(Qt::UserRole, id);
+        taskList->addItem(item);
+    }
+
+    query.exec("SELECT * FROM donetasks");
+    while (query.next()) {
+        int id = query.value("id").toInt();
+        QString text = query.value("task").toString();
+
+        QListWidgetItem *item = new QListWidgetItem(text);
+        item->setData(Qt::UserRole, id);
+        doneList->addItem(item);
+    }
 }
 
 // FUNCTIONAL
@@ -131,15 +151,44 @@ void Tasks::moveTask() {
     else {
         qDebug() << "Запись добавлена";
     }
+
+    QString task = item->text();
+
+    query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << "Ok";
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+    }
 }
 
 void Tasks::removeTask() {
-    qDeleteAll(taskList->selectedItems());
+    QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
+
+    QString task = item->text();
+
+    query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << "Ok";
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+    }
 }
 
 void Tasks::removeDone() {
-    qDeleteAll(doneList->selectedItems());
-    //doneList->clear();
+    QListWidgetItem *item = doneList->takeItem(doneList->currentRow());
+
+    QString task = item->text();
+
+    query.prepare("DELETE FROM donetasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << "Ok";
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+    }
 }
 
 void Tasks::toMainWindow() {

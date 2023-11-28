@@ -8,7 +8,7 @@
 
 static bool createConnection() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("data");
+    db.setDatabaseName("data.db");
 
     db.setUserName("admin");
     db.setHostName("localhost");

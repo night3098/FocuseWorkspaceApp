@@ -80,14 +80,12 @@ Notes::Notes(QMainWindow *parent) :
 
     query.exec("SELECT * FROM notes");
     while (query.next()) {
-        int id = query.value("id").toInt();
         QString name = query.value("name").toString();
         QString text = query.value("text").toString();
 
         QString note = name + text;
 
         QListWidgetItem *item = new QListWidgetItem(note);
-        item->setData(Qt::UserRole, id);
         notesList->addItem(item);
     }
 }
@@ -124,13 +122,10 @@ void Notes::saveNotes() {
             qDebug() << "Запись добавлена";
         }
 
-        int id = query.lastInsertId().toInt();
-
         noteEdit->clear();
         noteName->clear();
 
         QListWidgetItem *item = new QListWidgetItem(note);
-        item->setData(Qt::UserRole, id);
         notesList->addItem(item);
     }
     else {
@@ -142,14 +137,16 @@ void Notes::doubleClick(QListWidgetItem *item) {
     QSqlQuery query;
 
     QListWidgetItem *selectedItem = notesList->currentItem();
-    int id = selectedItem->data(Qt::UserRole).toInt();
     
     QString note = selectedItem->text();
     QStringList parts = note.split(" : ");
 
     if (parts.size() == 2) {
-        query.bindValue("id", id);
-        query.prepare("DELETE FROM notes WHERE id = id");
+        QString name = selectedItem->text();
+        QStringList parts = name.split(" : ");
+
+        QString n = parts[0] + " : ";
+        query.prepare("DELETE FROM notes WHERE name = '"+n+"'");
         
         noteName->setText(parts[0]);
         noteEdit->setPlainText(parts[1]);
@@ -167,10 +164,12 @@ void Notes::removeNote() {
     QSqlQuery query;
     
     QListWidgetItem *selectedItem = notesList->currentItem();
-    int id = selectedItem->data(Qt::UserRole).toInt();
 
-    query.bindValue("id", id);
-    query.prepare("DELETE FROM notes WHERE id = id");
+    QString name = selectedItem->text();
+    QStringList parts = name.split(" : ");
+
+    QString n = parts[0] + " : ";
+    query.prepare("DELETE FROM notes WHERE name = '"+n+"'");
 
     if (query.exec()) {
         delete selectedItem;
