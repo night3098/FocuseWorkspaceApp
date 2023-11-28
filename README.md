@@ -22,6 +22,6 @@ The compiled program is located at the path FocuseWorkspaceApp/src/FocuseApp/Foc
 - [x] Add tasks manager
 - [x] Add pomodoro timer and notes manager
 - [x] New Ui
-- [ ] Add data saving to the database
+- [x] Add data saving to the database
 - [ ] Make an application for android
 - [ ] Add login with user name and password
