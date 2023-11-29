@@ -14,7 +14,7 @@ MainWindow::MainWindow(QMainWindow *parent)
     setFixedSize(700, 350);
 
     imageLabel = new QLabel(this);
-    QPixmap image("../images/tasks.png");
+    QPixmap image("://tasks.png");
     imageLabel->setGeometry(50, 50, 300, 300);
     imageLabel->setPixmap(image);
 
@@ -53,20 +53,20 @@ MainWindow::~MainWindow()
 void MainWindow::openTasksWin() {
     hide();
     tasks_window = new Tasks(this);
-    tasks_window->setWindowIcon(QIcon("../images/tasks.svg"));
+    tasks_window->setWindowIcon(QIcon("://tasks.svg"));
     tasks_window->show();
 }
 
 void MainWindow::openNotesWin() {
     hide();
     notes_window = new Notes(this);
-    notes_window->setWindowIcon(QIcon("../images/notes.svg"));
+    notes_window->setWindowIcon(QIcon("://notes.svg"));
     notes_window->show();
 }
 
 void MainWindow::openPomodoroWin() {
     //hide();
     pomodoro_window = new Pomodoro(this);
-    pomodoro_window->setWindowIcon(QIcon("../images/pomodoro.svg"));
+    pomodoro_window->setWindowIcon(QIcon("://pomodoro.svg"));
     pomodoro_window->show();
 }
