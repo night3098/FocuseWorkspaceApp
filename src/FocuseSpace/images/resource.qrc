@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>home.svg</file>
+        <file>notes.svg</file>
+        <file>tasks.png</file>
+        <file>tasks.svg</file>
+        <file>pomodoro.svg</file>
+    </qresource>
+</RCC>
+

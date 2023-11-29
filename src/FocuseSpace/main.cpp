@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     MainWindow mainWindow;
     mainWindow.setStyleSheet( " background-color: #303030; " );
     mainWindow.setWindowTitle(" ~ focuse space ~ ");
-    mainWindow.setWindowIcon(QIcon("../images/home.svg"));
+    mainWindow.setWindowIcon(QIcon("://home.svg"));
     mainWindow.show();
     return a.exec();
 }

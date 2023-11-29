@@ -98,7 +98,7 @@ Notes::~Notes() {
 void Notes::toMainWindow() {
     close();
     MainWindow *mainWindow = new MainWindow(this);
-    mainWindow->setWindowIcon(QIcon("../images/home.svg"));
+    mainWindow->setWindowIcon(QIcon("://home.svg"));
     mainWindow->show();
 }
 

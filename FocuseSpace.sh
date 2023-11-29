@@ -1,5 +1,5 @@
 #!/bin/bash 
 
-cd src/FocuseSpace
+cd src/FocuseSpace/
 chmod +x FocuseSpace
 ./FocuseSpace
