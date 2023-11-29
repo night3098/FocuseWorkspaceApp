@@ -17,11 +17,15 @@ bash FocuseSpace.sh
 
 The compiled program is located at the path FocuseWorkspaceApp/src/FocuseApp/FocuseSpace
 
-# TO-DO
 
+# TO-DO
 - [x] Add tasks manager
 - [x] Add pomodoro timer and notes manager
 - [x] New Ui
 - [x] Add data saving to the database
 - [ ] Make an application for android
 - [ ] Add login with user name and password
+#
+
+
+# The compiled file is located in the directory : src/FocuseSpace/FocuseSpace
