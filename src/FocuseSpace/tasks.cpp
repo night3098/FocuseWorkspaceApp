@@ -22,7 +22,6 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
                   ");";
 
     if (!query.exec(str)) {
-        qDebug() << "Невозможно создать таблицу donetasks, либо она уже создана";
         qDebug() << query.lastError();
     }
     else {
@@ -36,7 +35,6 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
                   ");";
 
     if (!query.exec(str2)) {
-        qDebug() << "Невозможно создать таблицу tasks, либо она уже создана";
         qDebug() << query.lastError();
     }
     else {
@@ -66,7 +64,7 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 
     taskInput = new QLineEdit(this);
     taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    taskInput->setFont(QFont("SF Pro Black", 15));
+    taskInput->setFont(QFont("SF Pro Black", 12));
     taskInput->setGeometry(50, 480, 700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
     taskInput->setPlaceholderText("Task");
@@ -109,6 +107,8 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
         QListWidgetItem *item = new QListWidgetItem(text);
         item->setData(Qt::UserRole, id);
         taskList->addItem(item);
+
+        qDebug() << "Tasks list was loaded";
     }
 
     query.exec("SELECT * FROM donetasks");
@@ -119,6 +119,8 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
         QListWidgetItem *item = new QListWidgetItem(text);
         item->setData(Qt::UserRole, id);
         doneList->addItem(item);
+
+        qDebug() << "Tasks list was loaded";
     }
 }
 
@@ -131,11 +133,10 @@ void Tasks::addTask() {
     }
 
     if(!query.exec("INSERT INTO tasks (task) VALUES('"+task+"');")) {
-        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
         qDebug() << query.lastError();
     }
     else {
-        qDebug() << "Запись добавлена";
+        qDebug() << task << " was saved";
     }
 }
 
@@ -145,11 +146,10 @@ void Tasks::moveTask() {
     doneList->addItem(item);
 
     if(!query.exec("INSERT INTO donetasks (task) VALUES('"+done+"');")) {
-        qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
         qDebug() << query.lastError();
     }
     else {
-        qDebug() << "Запись добавлена";
+        qDebug() << done << " was moved";
     }
 
     QString task = item->text();
@@ -157,7 +157,7 @@ void Tasks::moveTask() {
     query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
 
     if (query.exec()) {
-        qDebug() << "Ok";
+        qDebug() << done << " was moved";
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
     }
@@ -171,7 +171,7 @@ void Tasks::removeTask() {
     query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
 
     if (query.exec()) {
-        qDebug() << "Ok";
+        qDebug() << task << " was deleted";
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
     }
@@ -185,7 +185,7 @@ void Tasks::removeDone() {
     query.prepare("DELETE FROM donetasks WHERE task = '"+task+"'");
 
     if (query.exec()) {
-        qDebug() << "Ok";
+        qDebug() << task << " was deleted";
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
     }

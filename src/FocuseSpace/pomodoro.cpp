@@ -7,7 +7,7 @@
 #include <QVBoxLayout>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QDebug>
 
 
 Pomodoro::Pomodoro(QMainWindow *parent) :
@@ -44,20 +44,17 @@ Pomodoro::Pomodoro(QMainWindow *parent) :
     connect(stopButton, SIGNAL(clicked()), timer, SLOT(stop()));
 
     changeButton = new QPushButton("CHANGE", this);
-    changeButton->setGeometry(10, 245, 130, 40);
+    changeButton->setGeometry(10, 250, 280, 40);
     changeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     changeButton->setFont(QFont("SF Pro Black", 12));
     connect(changeButton, SIGNAL(clicked()), this, SLOT(change()));
 
-    backButton = new QPushButton("BACK", this);
-    backButton->setGeometry(160, 245, 130, 40);
-    backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
-    backButton->setFont(QFont("SF Pro Black", 12));
-    connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
-
     timeLeft = 25 * 60;
     isPomodoro = true;
     isBreak = false;
+
+    qDebug() << "isPomodoro : " << isPomodoro;
+    qDebug() << "isBreak : " << isBreak;
 }
 
 Pomodoro::~Pomodoro() {
@@ -68,6 +65,8 @@ Pomodoro::~Pomodoro() {
 void Pomodoro::startPomodoro() {
     isBreak = false;
     timeLeft = 25 * 60;
+    qDebug() << "isPomodoro : " << isPomodoro;
+    qDebug() << "isBreak : " << isBreak;
     progressBar->setRange(0, timeLeft);
     progressBar->setValue(timeLeft);
     titleLabel->setText("WORK");
@@ -81,6 +80,8 @@ void Pomodoro::startPomodoro() {
 void Pomodoro::startBreak() {
     isBreak = true;
     timeLeft = 5 * 60;
+    qDebug() << "isPomodoro : " << isPomodoro;
+    qDebug() << "isBreak : " << isBreak;
     progressBar->setRange(0, timeLeft);
     progressBar->setValue(timeLeft);
     titleLabel->setText("BREAK");
@@ -106,9 +107,13 @@ void Pomodoro::updateTimer() {
         timer->stop();
         if (isPomodoro) {
             isPomodoro = false;
+            qDebug() << "isPomodoro : " << isPomodoro;
+            qDebug() << "isBreak : " << isBreak;
             startBreak();
         } else {
             isPomodoro = true;
+            qDebug() << "isPomodoro : " << isPomodoro;
+            qDebug() << "isBreak : " << isBreak;
             titleLabel->setText("WORK");
             titleLabel->setFont(QFont("SF Pro Black", 40));
         }
@@ -121,6 +126,8 @@ void Pomodoro::stop() {
     progressBar->setValue(0);
     isPomodoro = false;
     isBreak = false;
+    qDebug() << "isPomodoro : " << isPomodoro;
+    qDebug() << "isBreak : " << isBreak;
     titleLabel->setText("WORK");
     titleLabel->setGeometry(0, 20, 250, 50);
     titleLabel->setAlignment(Qt::AlignCenter);
