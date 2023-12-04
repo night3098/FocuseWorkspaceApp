@@ -21,5 +21,8 @@ bash build.sh
 - [x] Add pomodoro timer and notes manager
 - [x] New Ui
 - [x] Add data saving to the database
+- [ ] Add dark and light theme
+- [ ] Add more functionality
+- [ ] Add user preferences
 - [ ] Make an application for android
 - [ ] Add login with user name and password
