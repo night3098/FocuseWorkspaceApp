@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QDebug>
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent)
@@ -44,6 +45,8 @@ MainWindow::MainWindow(QMainWindow *parent)
     openTimer->setFont(QFont("SF Pro Black", 12));
 
     connect(openTimer, SIGNAL(clicked()), this, SLOT(openPomodoroWin()));
+
+    qDebug() << "OK";
 }
 
 MainWindow::~MainWindow()

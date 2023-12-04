@@ -25,7 +25,6 @@ Notes::Notes(QMainWindow *parent) :
                   ");";
 
     if (!query.exec(str)) {
-        qDebug() << "Невозможно создать таблицу notes, либо она уже создана";
         qDebug() << query.lastError();
     }
     else {
@@ -43,36 +42,36 @@ Notes::Notes(QMainWindow *parent) :
 
     noteName = new QLineEdit(this);
     noteName->setGeometry(280, 80, 500, 50);
-    noteName->setFont(QFont("SF Pro Black", 15));
+    noteName->setFont(QFont("SF Pro Black", 14));
     noteName->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     noteName->setPlaceholderText("Title");
 
     noteEdit = new QTextEdit(this);
     noteEdit->setGeometry(280, 150, 500, 500);
     noteEdit->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    noteEdit->setFont(QFont("SF Pro Black", 12));
+    noteEdit->setFont(QFont("SF Pro Black", 11));
     noteEdit->setPlaceholderText("Note");
 
     notesList = new QListWidget(this);
     notesList->setGeometry(20, 80, 240, 570);
     notesList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    notesList->setFont(QFont("SF Pro Black", 7));
+    notesList->setFont(QFont("SF Pro Black", 12));
     connect(notesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(doubleClick(QListWidgetItem*)));
 
     saveButton = new QPushButton("SAVE", this);
-    saveButton->setGeometry(605, 665, 175, 40);
+    saveButton->setGeometry(480, 665, 295, 40);
     saveButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     saveButton->setFont(QFont("SF Pro Black", 10));
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNotes()));
 
     backButton = new QPushButton("BACK", this);
-    backButton->setGeometry(20, 665, 365, 40);
+    backButton->setGeometry(20, 665, 235, 40);
     backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     backButton->setFont(QFont("SF Pro Black", 10));
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
 
     removeButton = new QPushButton("REMOVE", this);
-    removeButton->setGeometry(410, 665, 175, 40);
+    removeButton->setGeometry(280, 665, 175, 40);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     removeButton->setFont(QFont("SF Pro Black", 10));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
@@ -81,12 +80,15 @@ Notes::Notes(QMainWindow *parent) :
     query.exec("SELECT * FROM notes");
     while (query.next()) {
         QString name = query.value("name").toString();
-        QString text = query.value("text").toString();
+//        QString text = query.value("text").toString();
 
-        QString note = name + text;
+//        QString note = name + text;
 
-        QListWidgetItem *item = new QListWidgetItem(note);
+//        QListWidgetItem *item = new QListWidgetItem(note);
+        QListWidgetItem *item = new QListWidgetItem(name);
         notesList->addItem(item);
+
+        qDebug() << name << " was loaded";
     }
 }
 
@@ -108,24 +110,22 @@ void Notes::saveNotes() {
         QSqlQuery query;
 
         QString title = noteName->text();
-        qDebug() << title;
-        QString note = title + " : " + text;
-        QString nnnn = title + " : ";
+        QString note = title + text;
+        QString nnnn = title;
 
         QString exec = "INSERT INTO notes (name, text) VALUES('"+nnnn+"', '"+text+"');";
 
         if(!query.exec(exec)) {
-            qDebug() << "Невозможно провести данную операцию, либо запись уже внесена";
             qDebug() << query.lastError();
         }
         else {
-            qDebug() << "Запись добавлена";
+            qDebug() << title << " was saved";
         }
 
         noteEdit->clear();
         noteName->clear();
 
-        QListWidgetItem *item = new QListWidgetItem(note);
+        QListWidgetItem *item = new QListWidgetItem(title);
         notesList->addItem(item);
     }
     else {
@@ -139,24 +139,34 @@ void Notes::doubleClick(QListWidgetItem *item) {
     QListWidgetItem *selectedItem = notesList->currentItem();
     
     QString note = selectedItem->text();
-    QStringList parts = note.split(" : ");
 
-    if (parts.size() == 2) {
-        QString name = selectedItem->text();
-        QStringList parts = name.split(" : ");
+    QString name = selectedItem->text();
 
-        QString n = parts[0] + " : ";
-        query.prepare("DELETE FROM notes WHERE name = '"+n+"'");
-        
-        noteName->setText(parts[0]);
-        noteEdit->setPlainText(parts[1]);
+    query.exec("SELECT * FROM notes WHERE name = '"+name+"'");
+
+    if (query.exec()) {
+        while (query.next()) {
+            QString name = query.value("name").toString();
+            QString text = query.value("text").toString();
+
+            noteName->setText(name);
+            noteEdit->setText(text);
+
+            qDebug() << name << " was opened";
+        }
+    }else {
+        qDebug() << "Error moving data: " << query.lastError().text();
+    }
+
+
+        query.prepare("DELETE FROM notes WHERE name = '"+name+"'");
 
         if (query.exec()) {
             delete notesList->takeItem(notesList->row(item));
+            qDebug() << name << " was opened";
         } else {
-            qDebug() << "Error deleting data:" << query.lastError().text();
+            qDebug() << "Error moving data: " << query.lastError().text();
         }
-    }
 }
 
 
@@ -166,13 +176,12 @@ void Notes::removeNote() {
     QListWidgetItem *selectedItem = notesList->currentItem();
 
     QString name = selectedItem->text();
-    QStringList parts = name.split(" : ");
 
-    QString n = parts[0] + " : ";
-    query.prepare("DELETE FROM notes WHERE name = '"+n+"'");
+    query.prepare("DELETE FROM notes WHERE name = '"+name+"'");
 
     if (query.exec()) {
         delete selectedItem;
+        qDebug() << name << " was deleted";
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
     }
