@@ -71,7 +71,9 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     doneList->setFont(QFont("SF Pro Black", 12));
 
     taskInput = new QLineEdit(this);
+
     taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
+
     taskInput->setFont(QFont("SF Pro Black", 12));
     taskInput->setGeometry(50, 480, 700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
@@ -119,6 +121,7 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
         taskList->addItem(item);
 
         qDebug() << "Tasks list was loaded";
+
         statusBar->showMessage("All tasks was loaded");
     }
 
@@ -132,6 +135,7 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
         doneList->addItem(item);
 
         qDebug() << "Tasks list was loaded";
+
         statusBar->showMessage("All tasks was loaded");
     }
 }

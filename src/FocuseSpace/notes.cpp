@@ -35,7 +35,9 @@ Notes::Notes(QMainWindow *parent) :
     statusBar = new QStatusBar(this);
 
     noteName = new QLineEdit(this);
+
     noteName->setGeometry(280, 10, 500, 50);
+
     noteName->setFont(QFont("SF Pro Black", 14));
     noteName->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     noteName->setPlaceholderText("Title");
@@ -53,19 +55,25 @@ Notes::Notes(QMainWindow *parent) :
     connect(notesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(doubleClick(QListWidgetItem*)));
 
     saveButton = new QPushButton("SAVE", this);
+
     saveButton->setGeometry(480, 590, 300, 40);
+
     saveButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     saveButton->setFont(QFont("SF Pro Black", 10));
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNotes()));
 
     backButton = new QPushButton("BACK", this);
-    backButton->setGeometry(20, 590, 240, 40);
+
+    backButton->setGeometry(20, 665, 235, 40);
+
     backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     backButton->setFont(QFont("SF Pro Black", 10));
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
 
     removeButton = new QPushButton("REMOVE", this);
+
     removeButton->setGeometry(280, 590, 185, 40);
+
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     removeButton->setFont(QFont("SF Pro Black", 10));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
@@ -135,7 +143,7 @@ void Notes::doubleClick(QListWidgetItem *item) {
     QString text = noteEdit->toPlainText();
     if(text.isEmpty()) {
         QSqlQuery query;
-
+      
         QListWidgetItem *selectedItem = notesList->currentItem();
         
         QString note = selectedItem->text();
@@ -160,7 +168,6 @@ void Notes::doubleClick(QListWidgetItem *item) {
             qDebug() << "Error moving data: " << query.lastError().text();
             statusBar->showMessage(query.lastError().text());
         }
-
 
         query.prepare("DELETE FROM notes WHERE name = '"+name+"'");
 
@@ -192,7 +199,9 @@ void Notes::removeNote() {
     if (query.exec()) {
         delete selectedItem;
         qDebug() << name << " was deleted";
+
         statusBar->showMessage(name + " was deleted");
+
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
         statusBar->showMessage(query.lastError().text());

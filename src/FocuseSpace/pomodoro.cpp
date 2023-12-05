@@ -46,7 +46,9 @@ Pomodoro::Pomodoro(QMainWindow *parent) :
     connect(stopButton, SIGNAL(clicked()), timer, SLOT(stop()));
 
     changeButton = new QPushButton("CHANGE", this);
+
     changeButton->setGeometry(10, 170, 280, 40);
+
     changeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     changeButton->setFont(QFont("SF Pro Black", 12));
     connect(changeButton, SIGNAL(clicked()), this, SLOT(change()));
@@ -69,8 +71,10 @@ void Pomodoro::startPomodoro() {
     timeLeft = 25 * 60;
     qDebug() << "isPomodoro : " << isPomodoro;
     qDebug() << "isBreak : " << isBreak;
+
     //progressBar->setRange(0, timeLeft);
     //progressBar->setValue(timeLeft);
+
     titleLabel->setText("WORK");
     titleLabel->setFont(QFont("SF Pro Black", 70));
     titleLabel->setStyleSheet( " color: #ff3438; " );
@@ -84,8 +88,10 @@ void Pomodoro::startBreak() {
     timeLeft = 5 * 60;
     qDebug() << "isPomodoro : " << isPomodoro;
     qDebug() << "isBreak : " << isBreak;
+
     //progressBar->setRange(0, timeLeft);
     //progressBar->setValue(timeLeft);
+
     titleLabel->setText("BREAK");
     titleLabel->setFont(QFont("SF Pro Black", 70));
     titleLabel->setStyleSheet( " color: #5fe053; " );
