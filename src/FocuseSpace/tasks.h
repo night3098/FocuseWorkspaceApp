@@ -8,6 +8,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QStatusBar>
 
 class Tasks : public QMainWindow {
     Q_OBJECT
@@ -23,9 +24,11 @@ private slots:
     void removeDone();
 
 private:
+    QStatusBar *statusBar;
     QListWidget *taskList;
     QListWidget *doneList;
-    QLabel *winTitle;
+    QLabel *doneLabel;
+    QLabel *taskLabel;
     QLineEdit *taskInput;
     QSqlQuery query;
 

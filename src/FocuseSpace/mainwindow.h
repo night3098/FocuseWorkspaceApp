@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QStatusBar>
 
 #include "notes.h"
 #include "pomodoro.h"
@@ -29,6 +30,7 @@ private slots:
     void openPomodoroWin();
 
 private:
+    QStatusBar *statusBar;
     QLabel *titleMain;
     QPushButton *openTasks;
     QPushButton *openNotes;
