@@ -14,6 +14,8 @@ MainWindow::MainWindow(QMainWindow *parent)
     setWindowTitle(" ~ focuse space ~ ");
     setFixedSize(700, 350);
 
+    statusBar = new QStatusBar(this);
+
     imageLabel = new QLabel(this);
     QPixmap image("://tasks.png");
     imageLabel->setGeometry(50, 50, 300, 300);
@@ -46,7 +48,10 @@ MainWindow::MainWindow(QMainWindow *parent)
 
     connect(openTimer, SIGNAL(clicked()), this, SLOT(openPomodoroWin()));
 
+    setStatusBar(statusBar);
+
     qDebug() << "OK";
+    statusBar->showMessage("OK");
 }
 
 MainWindow::~MainWindow()

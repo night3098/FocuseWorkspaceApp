@@ -46,24 +46,34 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     setWindowTitle("~ tasks ~");
     setFixedSize(800, 600);
 
-    winTitle = new QLabel("TASKS", this);
-    winTitle->setGeometry(0, 30, 800, 60);
-    winTitle->setAlignment(Qt::AlignCenter);
-    winTitle->setFont(QFont("SF Pro Black", 30));
-    winTitle->setStyleSheet( " color: #ffffff; " );
+    statusBar = new QStatusBar(this);
+
+    taskLabel = new QLabel("TASKS", this);
+    taskLabel->setGeometry(150, 30, 100, 60);
+    taskLabel->setAlignment(Qt::AlignCenter);
+    taskLabel->setFont(QFont("SF Pro Black", 20));
+    taskLabel->setStyleSheet( " color: #ffffff; " );
+
+    doneLabel = new QLabel("DONE", this);
+    doneLabel->setGeometry(520, 30, 100, 60);
+    doneLabel->setAlignment(Qt::AlignCenter);
+    doneLabel->setFont(QFont("SF Pro Black", 20));
+    doneLabel->setStyleSheet( " color: #ffffff; " );
 
     taskList = new QListWidget(this);
-    taskList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #600900; alternate-background-color: #600900;" );
+    taskList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #600900;" );
     taskList->setGeometry(50, 100, 340, 360);
     taskList->setFont(QFont("SF Pro Black", 12));
 
     doneList = new QListWidget(this);
-    doneList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #006018; alternate-background-color: #303030;" );
+    doneList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     doneList->setGeometry(410, 100, 340, 360);
     doneList->setFont(QFont("SF Pro Black", 12));
 
     taskInput = new QLineEdit(this);
-    taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
+
+    taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
+
     taskInput->setFont(QFont("SF Pro Black", 12));
     taskInput->setGeometry(50, 480, 700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
@@ -99,6 +109,8 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     removeButton->setGeometry(650, 540, 100, 40);
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
 
+    setStatusBar(statusBar);
+
     query.exec("SELECT * FROM tasks");
     while (query.next()) {
         int id = query.value("id").toInt();
@@ -109,6 +121,8 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
         taskList->addItem(item);
 
         qDebug() << "Tasks list was loaded";
+
+        statusBar->showMessage("All tasks was loaded");
     }
 
     query.exec("SELECT * FROM donetasks");
@@ -121,6 +135,8 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
         doneList->addItem(item);
 
         qDebug() << "Tasks list was loaded";
+
+        statusBar->showMessage("All tasks was loaded");
     }
 }
 
@@ -137,6 +153,7 @@ void Tasks::addTask() {
     }
     else {
         qDebug() << task << " was saved";
+        statusBar->showMessage(task + " was saved");
     }
 }
 
@@ -150,6 +167,7 @@ void Tasks::moveTask() {
     }
     else {
         qDebug() << done << " was moved";
+        statusBar->showMessage(done + " was moved");
     }
 
     QString task = item->text();
@@ -158,8 +176,10 @@ void Tasks::moveTask() {
 
     if (query.exec()) {
         qDebug() << done << " was moved";
+        statusBar->showMessage(done + " was moved");
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
+        statusBar->showMessage(query.lastError().text());
     }
 }
 
@@ -172,8 +192,10 @@ void Tasks::removeTask() {
 
     if (query.exec()) {
         qDebug() << task << " was deleted";
+        statusBar->showMessage(task + " was deleted");
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
+        statusBar->showMessage(query.lastError().text());
     }
 }
 
@@ -186,8 +208,10 @@ void Tasks::removeDone() {
 
     if (query.exec()) {
         qDebug() << task << " was deleted";
+        statusBar->showMessage(task + " was deleted");
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
+        statusBar->showMessage(query.lastError().text());
     }
 }
 

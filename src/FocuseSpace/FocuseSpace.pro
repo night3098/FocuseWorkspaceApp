@@ -28,7 +28,8 @@ FORMS += \
     tasks.ui
 
 RESOURCES += \
-    images/resource.qrc
+    images/resource.qrc \
+    stylesheet.qss
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

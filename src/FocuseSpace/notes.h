@@ -8,6 +8,7 @@
 #include <QTextEdit>
 #include <QListWidget>
 #include <QSqlDatabase>
+#include <QStatusBar>
 #include <QSqlError>
 #include <QStatusBar>
 
@@ -30,7 +31,7 @@ private slots:
     void doubleClick(QListWidgetItem*);
 
 private:
-    QLabel *title;
+    QStatusBar *statusBar;
     QTextEdit *noteEdit;
     QListWidget *notesList;
     QLineEdit *noteName;
