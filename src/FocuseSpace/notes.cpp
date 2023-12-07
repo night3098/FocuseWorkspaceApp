@@ -94,36 +94,63 @@ Notes::~Notes() {
 }
 
 void Notes::toMainWindow() {
-    close();
-    MainWindow *mainWindow = new MainWindow(this);
-    mainWindow->setWindowIcon(QIcon("://home.svg"));
-    mainWindow->show();
+    QString text = noteEdit->toPlainText();
+    if(text.isEmpty()) {
+        close();
+        MainWindow *mainWindow = new MainWindow(this);
+        mainWindow->setWindowIcon(QIcon("://home.svg"));
+        mainWindow->show();
+    }
+    else {
+        qDebug() << "Save the note first.";
+        statusBar->showMessage("Save the note first.");
+    }
 }
 
 void Notes::saveNotes() {
-    QString text = noteEdit->toPlainText();
+    QSqlQuery query;
+    QString text = noteEdit->toPlainText().toUtf8();
+    QString title = noteName->text().toUtf8();
+    QString note = title + text;
+
+
     if(!text.isEmpty()) {
-        QSqlQuery query;
+        if(query.exec("SELECT id FROM notes WHERE name = '"+title+"'")) {
+            if (query.next()) {
+                int id = query.value("id").toInt();
+                if(query.exec("UPDATE notes SET text = '"+text+"' WHERE id = "+id+"")) {
+                    qDebug() << title << " was updates";
+                    statusBar->showMessage(title + " was updated");
 
-        QString title = noteName->text();
-        QString note = title + text;
-        QString nnnn = title;
+                    noteEdit->clear();
+                    noteName->clear();
+                }
+                else {
+                    qDebug() << query.lastError();
+                    statusBar->showMessage(query.lastError().text());
+                }
+            }
+            else {
+                if(query.exec("INSERT INTO notes (name, text) VALUES('"+title+"', '"+text+"');")) {
+                    noteEdit->clear();
+                    noteName->clear();
 
-        QString exec = "INSERT INTO notes (name, text) VALUES('"+nnnn+"', '"+text+"');";
+                    QListWidgetItem *item = new QListWidgetItem(title);
+                    notesList->addItem(item);
 
-        if(!query.exec(exec)) {
-            qDebug() << query.lastError();
+                    qDebug() << title << " was saved";
+                    statusBar->showMessage(title + " was saved");
+                }
+                else {
+                    qDebug() << query.lastError();
+                    statusBar->showMessage(query.lastError().text());
+                }
+            }
         }
         else {
-            qDebug() << title << " was saved";
-            statusBar->showMessage(title + " was saved");
+            qDebug() << query.lastError().text();
+            statusBar->showMessage(query.lastError().text());
         }
-
-        noteEdit->clear();
-        noteName->clear();
-
-        QListWidgetItem *item = new QListWidgetItem(title);
-        notesList->addItem(item);
     }
     else {
         qDebug() << "Note is empty";
@@ -154,6 +181,7 @@ void Notes::doubleClick(QListWidgetItem *item) {
 
                 qDebug() << name << " was opened";
                 statusBar->showMessage(name + " was opened");
+                delete notesList->takeItem(notesList->row(item));
             }
         }
         else {
@@ -161,7 +189,7 @@ void Notes::doubleClick(QListWidgetItem *item) {
             statusBar->showMessage(query.lastError().text());
         }
 
-
+/*
         query.prepare("DELETE FROM notes WHERE name = '"+name+"'");
 
         if (query.exec()) {
@@ -172,6 +200,7 @@ void Notes::doubleClick(QListWidgetItem *item) {
             qDebug() << "Error moving data: " << query.lastError().text();
             statusBar->showMessage(query.lastError().text());
         }
+*/
     }
     else {
         qDebug() << "Previous changes were not saved. save them and try again.";
