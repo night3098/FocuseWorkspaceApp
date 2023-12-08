@@ -21,7 +21,8 @@ private slots:
     void toMainWindow();
     void removeTask();
     void removeDone();
-    void doubleClick(QListWidgetItem*);
+    void moveToTasks(QListWidgetItem*);
+    void moveToDone(QListWidgetItem*);
 
 private:
     QStatusBar *statusBar;
@@ -32,7 +33,6 @@ private:
     QLineEdit *taskInput;
     QSqlQuery query;
 
-    QPushButton *addButton;
     QPushButton *removeButton;
     QPushButton *clearTask;
     QPushButton *backButton;

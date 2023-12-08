@@ -78,13 +78,14 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     //taskList->setGeometry(50, 100, 340, 360);
     taskList->setMinimumSize(340, 360);
     taskList->setFont(QFont("SF Pro Black", 12));
-    connect(taskList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(doubleClick(QListWidgetItem*)));
+    connect(taskList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(moveToDone(QListWidgetItem*)));
 
     doneList = new QListWidget(this);
     doneList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     //doneList->setGeometry(410, 100, 340, 360);
     doneList->setMinimumSize(340, 360);
     doneList->setFont(QFont("SF Pro Black", 12));
+    connect(doneList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(moveToTasks(QListWidgetItem*)));
 
     taskInput = new QLineEdit(this);
     taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
@@ -93,6 +94,17 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     taskInput->setMinimumSize(700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
     taskInput->setPlaceholderText("Task");
+    connect(taskInput, &QLineEdit::returnPressed, [=]{
+        QString title = taskInput->text();
+        
+        if(title.isEmpty()) {
+            qDebug() << "Task is empty";
+            statusBar->showMessage("Task is empty");
+        }
+        else {
+            addTask();
+        }
+    });
 
     clearTask = new QPushButton("REMOVE", this);
     clearTask->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
@@ -107,13 +119,6 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
     //backButton->setGeometry(300, 540, 200, 40);
     backButton->setMinimumSize(100, 40);
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
-
-    addButton = new QPushButton("ADD TASK", this);
-    addButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
-    addButton->setFont(QFont("SF Pro Black", 10));
-    //addButton->setGeometry(530, 540, 100, 40);
-    addButton->setMinimumSize(100, 40);
-    connect(addButton, SIGNAL(clicked()), this, SLOT(addTask()));
 
     removeButton = new QPushButton("REMOVE", this);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
@@ -132,7 +137,6 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 
     buttonsLayout->addWidget(clearTask);
     buttonsLayout->addWidget(backButton);
-    buttonsLayout->addWidget(addButton);
     buttonsLayout->addWidget(removeButton);
 
     mainLayout->addLayout(titleLayout);
@@ -186,14 +190,15 @@ void Tasks::addTask() {
     }
 }
 
-void Tasks::doubleClick(QListWidgetItem *item) {
+void Tasks::moveToDone(QListWidgetItem *item) {
     QString done = item->text();
-    doneList->addItem(item);
 
     if(!query.exec("INSERT INTO donetasks (task) VALUES('"+done+"');")) {
         qDebug() << query.lastError();
     }
     else {
+        QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
+        doneList->addItem(item);
         qDebug() << done << " was moved";
         statusBar->showMessage(done + " was moved");
     }
@@ -201,6 +206,32 @@ void Tasks::doubleClick(QListWidgetItem *item) {
     QString task = item->text();
 
     query.prepare("DELETE FROM tasks WHERE task = '"+task+"'");
+
+    if (query.exec()) {
+        qDebug() << done << " was moved";
+        statusBar->showMessage(done + " was moved");
+    } else {
+        qDebug() << "Error deleting data:" << query.lastError().text();
+        statusBar->showMessage(query.lastError().text());
+    }
+}
+
+void Tasks::moveToTasks(QListWidgetItem *item) {
+    QString task = item->text();
+
+    if(!query.exec("INSERT INTO tasks (task) VALUES('"+task+"');")) {
+        qDebug() << query.lastError();
+    }
+    else {
+        QListWidgetItem *item = doneList->takeItem(doneList->currentRow());
+        taskList->addItem(item);
+        qDebug() << task << " was moved";
+        statusBar->showMessage(task + " was moved");
+    }
+
+    QString done = item->text();
+
+    query.prepare("DELETE FROM donetasks WHERE task = '"+done+"'");
 
     if (query.exec()) {
         qDebug() << done << " was moved";

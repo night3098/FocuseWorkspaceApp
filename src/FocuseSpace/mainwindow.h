@@ -9,6 +9,7 @@
 #include <QStatusBar>
 #include <QPalette>
 #include <QStyle>
+#include <QKeyEvent>
 
 #include "notes.h"
 #include "pomodoro.h"
@@ -25,6 +26,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QMainWindow *parent = nullptr);
     ~MainWindow();
+
+protected:
+    void keyPressEvent(QKeyEvent *e) override;
 
 private slots:
     void openTasksWin();
