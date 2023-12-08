@@ -7,6 +7,8 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QStatusBar>
+#include <QPalette>
+#include <QStyle>
 
 #include "notes.h"
 #include "pomodoro.h"
@@ -35,8 +37,8 @@ private:
     QPushButton *openTasks;
     QPushButton *openNotes;
     QPushButton *openTimer;
-    QPushButton *closeWindow;
     QLabel *imageLabel;
+
     Tasks *tasks_window;
     Notes *notes_window;
     Pomodoro *pomodoro_window;

@@ -1,20 +1,31 @@
 #include "pomodoro.h"
 #include "ui_pomodoro.h"
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
 #include <QDialog>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QTimer>
 #include <QVBoxLayout>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QDebug>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 Pomodoro::Pomodoro(QMainWindow *parent) :
     QMainWindow(parent) {
         
     setWindowTitle("~ pomodoro ~");
-    setFixedSize(300, 220);
+    //setFixedSize(300, 220);
+    setMinimumSize(300, 220);
+
+    QWidget *centralWidget = new QWidget(this);
+    setCentralWidget(centralWidget);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+    QVBoxLayout *infoLayout = new QVBoxLayout;
+    QHBoxLayout *buttonsLayout = new QHBoxLayout;
 
     titleLabel = new QLabel(this);
     titleLabel->setFont(QFont("SF Pro Black", 40));
@@ -34,24 +45,30 @@ Pomodoro::Pomodoro(QMainWindow *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
 
     startButton = new QPushButton("START", this);
-    startButton->setGeometry(10, 120, 130, 40);
+    startButton->setMinimumSize(100, 40);
     startButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     startButton->setFont(QFont("SF Pro Black", 12));
     connect(startButton, SIGNAL(clicked()), this, SLOT(startPomodoro()));
 
     stopButton = new QPushButton("STOP", this);
-    stopButton->setGeometry(160, 120, 130, 40);
+    stopButton->setMinimumSize(100, 40);
     stopButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     stopButton->setFont(QFont("SF Pro Black", 12));
     connect(stopButton, SIGNAL(clicked()), timer, SLOT(stop()));
 
     changeButton = new QPushButton("CHANGE", this);
-
-    changeButton->setGeometry(10, 170, 280, 40);
-
+    changeButton->setMinimumSize(100, 40);
     changeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-radius: 10px; border-style: solid; border-color: #444444; alternate-background-color: #303030;" );
     changeButton->setFont(QFont("SF Pro Black", 12));
     connect(changeButton, SIGNAL(clicked()), this, SLOT(change()));
+
+    infoLayout->addWidget(titleLabel);
+    infoLayout->addWidget(startButton);
+    buttonsLayout->addWidget(stopButton);
+    buttonsLayout->addWidget(changeButton);
+
+    mainLayout->addLayout(infoLayout);
+    mainLayout->addLayout(buttonsLayout);
 
     timeLeft = 25 * 60;
     isPomodoro = true;

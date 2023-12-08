@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+#include <QStyle>
 #include <QWidget>
 #include <QMainWindow>
 #include <QtSql/QSqlDatabase>
@@ -7,6 +9,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QDebug>
+#include <QPalette>
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent)
