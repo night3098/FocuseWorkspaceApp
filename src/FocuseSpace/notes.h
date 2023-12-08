@@ -10,6 +10,8 @@
 #include <QSqlDatabase>
 #include <QStatusBar>
 #include <QSqlError>
+#include <QKeyEvent>
+#include <QDebug>
 #include <QStatusBar>
 
 QT_BEGIN_NAMESPACE

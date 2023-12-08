@@ -11,6 +11,8 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QSqlRecord>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 {
@@ -44,72 +46,99 @@ Tasks::Tasks(QMainWindow *parent) : QMainWindow(parent)
 
 // UI
     setWindowTitle("~ tasks ~");
-    setFixedSize(800, 600);
+    //setFixedSize(800, 600);
+    setMinimumSize(800, 600);
+    
+    QWidget *centralWidget = new QWidget(this);
+    setCentralWidget(centralWidget);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(centralWidget);
+    QHBoxLayout *titleLayout = new QHBoxLayout;
+    QHBoxLayout *tasksLayout = new QHBoxLayout;
+    QHBoxLayout *buttonsLayout = new QHBoxLayout;
+
+    mainLayout->setSpacing(10);
 
     statusBar = new QStatusBar(this);
 
     taskLabel = new QLabel("TASKS", this);
-    taskLabel->setGeometry(150, 30, 100, 60);
+    //taskLabel->setGeometry(150, 30, 100, 60);
     taskLabel->setAlignment(Qt::AlignCenter);
     taskLabel->setFont(QFont("SF Pro Black", 20));
     taskLabel->setStyleSheet( " color: #ffffff; " );
 
     doneLabel = new QLabel("DONE", this);
-    doneLabel->setGeometry(520, 30, 100, 60);
+    //doneLabel->setGeometry(520, 30, 100, 60);
     doneLabel->setAlignment(Qt::AlignCenter);
     doneLabel->setFont(QFont("SF Pro Black", 20));
     doneLabel->setStyleSheet( " color: #ffffff; " );
 
     taskList = new QListWidget(this);
     taskList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #600900;" );
-    taskList->setGeometry(50, 100, 340, 360);
+    //taskList->setGeometry(50, 100, 340, 360);
+    taskList->setMinimumSize(340, 360);
     taskList->setFont(QFont("SF Pro Black", 12));
+    connect(taskList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(doubleClick(QListWidgetItem*)));
 
     doneList = new QListWidget(this);
     doneList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-    doneList->setGeometry(410, 100, 340, 360);
+    //doneList->setGeometry(410, 100, 340, 360);
+    doneList->setMinimumSize(340, 360);
     doneList->setFont(QFont("SF Pro Black", 12));
 
     taskInput = new QLineEdit(this);
-
     taskInput->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff;border-width: 5px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
-
     taskInput->setFont(QFont("SF Pro Black", 12));
-    taskInput->setGeometry(50, 480, 700, 40);
+    //taskInput->setGeometry(50, 480, 700, 40);
+    taskInput->setMinimumSize(700, 40);
     taskInput->setAlignment(Qt::AlignCenter);
     taskInput->setPlaceholderText("Task");
-
-    removeButton = new QPushButton("DONE", this);
-    removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
-    removeButton->setFont(QFont("SF Pro Black", 10));
-    removeButton->setGeometry(170, 540, 100, 40);
-    connect(removeButton, SIGNAL(clicked()), this, SLOT(moveTask()));
 
     clearTask = new QPushButton("REMOVE", this);
     clearTask->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     clearTask->setFont(QFont("SF Pro Black", 10));
-    clearTask->setGeometry(50, 540, 100, 40);
+    //clearTask->setGeometry(50, 540, 100, 40);
+    clearTask->setMinimumSize(100, 40);
     connect(clearTask, SIGNAL(clicked()), this, SLOT(removeTask()));
 
     backButton = new QPushButton("BACK", this);
     backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     backButton->setFont(QFont("SF Pro Black", 10));
-    backButton->setGeometry(300, 540, 200, 40);
+    //backButton->setGeometry(300, 540, 200, 40);
+    backButton->setMinimumSize(100, 40);
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
 
     addButton = new QPushButton("ADD TASK", this);
     addButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     addButton->setFont(QFont("SF Pro Black", 10));
-    addButton->setGeometry(530, 540, 100, 40);
+    //addButton->setGeometry(530, 540, 100, 40);
+    addButton->setMinimumSize(100, 40);
     connect(addButton, SIGNAL(clicked()), this, SLOT(addTask()));
 
     removeButton = new QPushButton("REMOVE", this);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     removeButton->setFont(QFont("SF Pro Black", 10));
-    removeButton->setGeometry(650, 540, 100, 40);
+    //removeButton->setGeometry(650, 540, 100, 40);
+    removeButton->setMinimumSize(100, 40);
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeDone()));
 
     setStatusBar(statusBar);
+
+    titleLayout->addWidget(taskLabel);
+    titleLayout->addWidget(doneLabel);
+
+    tasksLayout->addWidget(taskList);
+    tasksLayout->addWidget(doneList);
+
+    buttonsLayout->addWidget(clearTask);
+    buttonsLayout->addWidget(backButton);
+    buttonsLayout->addWidget(addButton);
+    buttonsLayout->addWidget(removeButton);
+
+    mainLayout->addLayout(titleLayout);
+    mainLayout->addLayout(tasksLayout);
+    mainLayout->addWidget(taskInput);
+    mainLayout->addLayout(buttonsLayout);
 
     query.exec("SELECT * FROM tasks");
     while (query.next()) {
@@ -157,8 +186,7 @@ void Tasks::addTask() {
     }
 }
 
-void Tasks::moveTask() {
-    QListWidgetItem *item = taskList->takeItem(taskList->currentRow());
+void Tasks::doubleClick(QListWidgetItem *item) {
     QString done = item->text();
     doneList->addItem(item);
 

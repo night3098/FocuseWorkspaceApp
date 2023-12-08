@@ -18,10 +18,10 @@ public:
 
 private slots:
     void addTask();
-    void moveTask();
     void toMainWindow();
     void removeTask();
     void removeDone();
+    void doubleClick(QListWidgetItem*);
 
 private:
     QStatusBar *statusBar;

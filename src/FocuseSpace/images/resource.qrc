@@ -5,6 +5,7 @@
         <file>tasks.png</file>
         <file>tasks.svg</file>
         <file>pomodoro.svg</file>
+        <file>settings.svg</file>
     </qresource>
 </RCC>
 
