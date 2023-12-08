@@ -142,33 +142,45 @@ void Notes::toMainWindow() {
 }
 
 void Notes::saveNotes() {
+    QSqlQuery query;
+
     QString text = noteEdit->toPlainText();
+    QString name = noteName->text();
+
     if(!text.isEmpty()) {
-        QSqlQuery query;
+        if(query.exec("SELECT * FROM library WHERE '"+name+"' LIKE name")) {
+            if(query.exec("UPDATE notes SET name = '"+name+"' text='"+text+"' ")) {
+                qDebug() << name << " was updated";
+                statusBar->showMessage(name + " was updated");
 
-        QString title = noteName->text();
-        QString note = title + text;
-        QString nnnn = title;
-
-        QString exec = "INSERT INTO notes (name, text) VALUES('"+nnnn+"', '"+text+"');";
-
-        if(!query.exec(exec)) {
-            qDebug() << query.lastError();
+                noteEdit->clear();
+                noteName->clear();
+            }
+            else {
+                qDebug() << query.lastError();
+                statusBar->showMessage(query.lastError().text());
+            }
         }
         else {
-            qDebug() << title << " was saved";
-            statusBar->showMessage(title + " was saved");
+            if(query.exec("INSERT INTO notes (name, text) VALUES('"+name+"', '"+text+"');")) {
+                qDebug() << name << " was saved";
+                statusBar->showMessage(name + " was saved");
+
+                QListWidgetItem *item = new QListWidgetItem(name);
+                notesList->addItem(item);
+
+                noteEdit->clear();
+                noteName->clear();
+            }
+            else {
+                qDebug() << query.lastError();
+                statusBar->showMessage(query.lastError().text());
+            }
         }
-
-        noteEdit->clear();
-        noteName->clear();
-
-        QListWidgetItem *item = new QListWidgetItem(title);
-        notesList->addItem(item);
     }
     else {
         qDebug() << "Note is empty";
-        statusBar->showMessage("Note is empty");
+        statusBar->showMessage("Notes is empty");
     }
 }
 
@@ -219,6 +231,8 @@ void Notes::doubleClick(QListWidgetItem *item) {
         statusBar->showMessage("Previous changes were not saved. save them and try again.");
     }
 }
+
+
 
 void Notes::removeNote() {
     QSqlQuery query;
