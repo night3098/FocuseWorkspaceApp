@@ -46,4 +46,6 @@ private:
     Pomodoro *pomodoro;
 };
 
+
+
 #endif // POMODORO_H

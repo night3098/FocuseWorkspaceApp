@@ -111,8 +111,11 @@ Notes::Notes(QMainWindow *parent) :
     query.exec("SELECT * FROM notes");
     while (query.next()) {
         QString name = query.value("name").toString();
+        QString createdTime = query.value("createdTime").toString();
 
-        QListWidgetItem *item = new QListWidgetItem(name);
+        QString itemText = name + "\n" + createdTime;
+
+        QListWidgetItem *item = new QListWidgetItem(itemText);
         notesList->addItem(item);
 
         qDebug() << name << " was loaded";
@@ -147,6 +150,8 @@ void Notes::saveNotes() {
     QString text = noteEdit->toPlainText();
     QString name = noteName->text();
 
+    QString itemText = name + "\n" + createdTime;
+
     if(!text.isEmpty()) {
         if(query.exec("SELECT * FROM library WHERE '"+name+"' LIKE name")) {
             if(query.exec("UPDATE notes SET name = '"+name+"' text='"+text+"' ")) {
@@ -166,7 +171,7 @@ void Notes::saveNotes() {
                 qDebug() << name << " was saved";
                 statusBar->showMessage(name + " was saved");
 
-                QListWidgetItem *item = new QListWidgetItem(name);
+                QListWidgetItem *item = new QListWidgetItem(itemText);
                 notesList->addItem(item);
 
                 noteEdit->clear();
@@ -190,10 +195,11 @@ void Notes::doubleClick(QListWidgetItem *item) {
         QSqlQuery query;
 
         QListWidgetItem *selectedItem = notesList->currentItem();
-        
-        QString note = selectedItem->text();
+    QString itemText = selectedItem->text();
 
-        QString name = selectedItem->text();
+    QStringList text = itemText.split('\n');
+
+    QString name = text[0];
 
         query.exec("SELECT * FROM notes WHERE name = '"+name+"'");
 
@@ -239,7 +245,11 @@ void Notes::removeNote() {
     
     QListWidgetItem *selectedItem = notesList->currentItem();
 
-    QString name = selectedItem->text();
+    QString itemText = selectedItem->text();
+
+    QStringList text = itemText.split('\n');
+
+    QString name = text[0];
 
     query.prepare("DELETE FROM notes WHERE name = '"+name+"'");
 
