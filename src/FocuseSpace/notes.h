@@ -32,6 +32,9 @@ private slots:
     void removeNote();
     void doubleClick(QListWidgetItem*);
 
+protected:
+    void keyPressEvent(QKeyEvent *e) override;
+
 private:
     QStatusBar *statusBar;
     QTextEdit *noteEdit;

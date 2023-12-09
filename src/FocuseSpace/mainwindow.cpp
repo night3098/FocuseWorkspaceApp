@@ -81,3 +81,24 @@ void MainWindow::openPomodoroWin() {
     pomodoro_window->setWindowIcon(QIcon("://pomodoro.svg"));
     pomodoro_window->show();
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *e) {
+    if(e->key() == Qt::Key_1) {
+        hide();
+        tasks_window = new Tasks(this);
+        tasks_window->setWindowIcon(QIcon("://tasks.svg"));
+        tasks_window->show();
+    }
+    if(e->key() == Qt::Key_2) {
+        hide();
+        notes_window = new Notes(this);
+        notes_window->setWindowIcon(QIcon("://notes.svg"));
+        notes_window->show();
+    }
+    if(e->key() == Qt::Key_3) {
+        //hide();
+        pomodoro_window = new Pomodoro(this);
+        pomodoro_window->setWindowIcon(QIcon("://pomodoro.svg"));
+        pomodoro_window->show();
+    }
+}

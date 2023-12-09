@@ -13,6 +13,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QDateTime>
 #include <QMessageBox>
 #include <QVBoxLayout>
 
@@ -24,7 +25,8 @@ Notes::Notes(QMainWindow *parent) :
     QString str = "CREATE TABLE notes ( "
                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                   "name VARCHAR(100),"
-                  "text VARCHAR(999999999)"
+                  "text VARCHAR(999999999),"
+                  "createdTime VARCHAR(50)"
                   ");";
 
     if (!query.exec(str)) {
@@ -109,12 +111,11 @@ Notes::Notes(QMainWindow *parent) :
     query.exec("SELECT * FROM notes");
     while (query.next()) {
         QString name = query.value("name").toString();
-//        QString text = query.value("text").toString();
+        QString createdTime = query.value("createdTime").toString();
 
-//        QString note = name + text;
+        QString itemText = name + "\n" + createdTime;
 
-//        QListWidgetItem *item = new QListWidgetItem(note);
-        QListWidgetItem *item = new QListWidgetItem(name);
+        QListWidgetItem *item = new QListWidgetItem(itemText);
         notesList->addItem(item);
 
         qDebug() << name << " was loaded";
@@ -142,10 +143,14 @@ void Notes::toMainWindow() {
 }
 
 void Notes::saveNotes() {
+    QString createdTime = QDateTime::currentDateTime().toString("hh:mm dd.MM.yyyy");
+
     QSqlQuery query;
 
     QString text = noteEdit->toPlainText();
     QString name = noteName->text();
+
+    QString itemText = name + "\n" + createdTime;
 
     if(!text.isEmpty()) {
         if(query.exec("SELECT * FROM library WHERE '"+name+"' LIKE name")) {
@@ -162,11 +167,11 @@ void Notes::saveNotes() {
             }
         }
         else {
-            if(query.exec("INSERT INTO notes (name, text) VALUES('"+name+"', '"+text+"');")) {
+            if(query.exec("INSERT INTO notes (name, text, createdTime) VALUES('"+name+"', '"+text+"', '"+createdTime+"');")) {
                 qDebug() << name << " was saved";
                 statusBar->showMessage(name + " was saved");
 
-                QListWidgetItem *item = new QListWidgetItem(name);
+                QListWidgetItem *item = new QListWidgetItem(itemText);
                 notesList->addItem(item);
 
                 noteEdit->clear();
@@ -190,10 +195,11 @@ void Notes::doubleClick(QListWidgetItem *item) {
         QSqlQuery query;
 
         QListWidgetItem *selectedItem = notesList->currentItem();
-        
-        QString note = selectedItem->text();
+    QString itemText = selectedItem->text();
 
-        QString name = selectedItem->text();
+    QStringList text = itemText.split('\n');
+
+    QString name = text[0];
 
         query.exec("SELECT * FROM notes WHERE name = '"+name+"'");
 
@@ -239,7 +245,11 @@ void Notes::removeNote() {
     
     QListWidgetItem *selectedItem = notesList->currentItem();
 
-    QString name = selectedItem->text();
+    QString itemText = selectedItem->text();
+
+    QStringList text = itemText.split('\n');
+
+    QString name = text[0];
 
     query.prepare("DELETE FROM notes WHERE name = '"+name+"'");
 
@@ -250,5 +260,13 @@ void Notes::removeNote() {
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
         statusBar->showMessage(query.lastError().text());
+    }
+}
+
+
+void Notes::keyPressEvent(QKeyEvent *e) {
+    if(e->key() == Qt::Key_Control+Qt::Key_S) {
+        qDebug() << "CTRL+S pressed";
+        Notes::saveNotes();
     }
 }
