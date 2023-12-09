@@ -35,6 +35,7 @@ bash build.sh
 > The compiled file is located in the directory : src/FocuseSpace/FocuseSpace
 
 <h1>TO-DO</h1>
+
 - [x] Add tasks manager
 - [x] Add pomodoro timer and notes manager
 - [x] New Ui
