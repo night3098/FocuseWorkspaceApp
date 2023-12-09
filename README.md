@@ -1,22 +1,40 @@
-# FOCUSE WORKSPACE
+<h1>FOCUSE WORKSPACE</h1>
 
+<div id="statusBadges" align=center>
+	<img src="https://img.shields.io/github/last-commit/night3098/FocuseWorkspaceApp?style=for-the-badge&logo=github&color=1d67d5&logoColor=D9E0EE&labelColor=0d1117"/>
+	<img src="https://img.shields.io/github/stars/night3098/FocuseWorkspaceApp?style=for-the-badge&logo=apachespark&color=1dd55e&logoColor=D9E0EE&labelColor=0d1117"/>
+	<img src="https://img.shields.io/github/v/release/night3098/FocuseWorkspaceApp?style=for-the-badge&logo=gitbook&color=a31dd5&logoColor=D9E0EE&labelColor=0d1117"/>
+</div>
 
-> ![c++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white "c++") ![qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white "qt") ![sqlite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white "sqlite") ![linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black "linux")
+<div id="social" align=center>
+	<a href="https://discord.gg/#9707" target="blank"><img src="https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white"/></a>
+	<a href="https://t.me/Night3098" target="blank"><img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white"/></a>
+	<a href="mailto:night3098game@gmail.com" target="blank"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white"/></a>
+	<a href="https://www.reddit.com/user/Night3098" target="blank"><img src="https://img.shields.io/badge/Reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white"/></a>
+</div>
+
+<div id="soft" align=center>
+	<img src="https://img.shields.io/badge/c  ++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white"/>
+	<img src="https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white"/>
+	<img src="https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white"/>
+	<img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black"/>
+</div>
 
 ![FocuseSpace](https://github.com/night3098/FocuseWorkspaceApp/assets/134074263/eae9848a-473f-44bb-ac34-1da5e7edc519)
 
-# INSTALLING
+<h1> INSTALLING</h1>
 
 > !!! For the app to work, you need to install QT !!!
 
-```
+```shell
 git clone https://github.com/night3098/FocuseWorkspaceApp
 cd FocuseWorkspaceApp
 bash build.sh
 ```
+
 > The compiled file is located in the directory : src/FocuseSpace/FocuseSpace
 
-# TO-DO
+<h1>TO-DO</h1>
 - [x] Add tasks manager
 - [x] Add pomodoro timer and notes manager
 - [x] New Ui
