@@ -14,12 +14,15 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QDateTime>
+#include <QObject>
 #include <QMessageBox>
 #include <QVBoxLayout>
 
 Notes::Notes(QMainWindow *parent) :
     QMainWindow(parent)
 {
+    QSettings settings("Notes", "Notes");
+    restoreGeometry(settings.value("geometry").toByteArray());
 
     QSqlQuery query;
     QString str = "CREATE TABLE notes ( "
@@ -36,7 +39,7 @@ Notes::Notes(QMainWindow *parent) :
         qDebug() << "Таблица notes создана";
     }
     //setFixedSize(800, 650);
-    setMinimumSize(800, 650);
+    setMinimumSize(300, 350);
     
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -51,44 +54,38 @@ Notes::Notes(QMainWindow *parent) :
     statusBar = new QStatusBar(this);
 
     noteName = new QLineEdit(this);
-    //noteName->setGeometry(280, 10, 500, 50);
-    noteName->setMinimumSize(525, 50);
+    noteName->setMinimumSize(50, 50);
     noteName->setFont(QFont("SF Pro Black", 14));
     noteName->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     noteName->setPlaceholderText("Title");
 
     noteEdit = new QTextEdit(this);
-    //noteEdit->setGeometry(280, 80, 500, 500);
-    noteEdit->setMinimumSize(525, 500);
+    noteEdit->setMinimumSize(50, 50);
     noteEdit->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     noteEdit->setFont(QFont("SF Pro Black", 11));
     noteEdit->setPlaceholderText("Note");
 
     notesList = new QListWidget(this);
-    //notesList->setGeometry(20, 10, 240, 570);'
-    notesList->setMinimumSize(215, 560);
+    notesList->setMinimumSize(50, 20);     // 560);
     notesList->setMaximumSize(215, notesList->maximumHeight());
     notesList->setStyleSheet( " background-color: #393939; selection-background-color: #999999; selection-color: #ffffff; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #393939; alternate-background-color: #303030;" );
     notesList->setFont(QFont("SF Pro Black", 12));
     connect(notesList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(doubleClick(QListWidgetItem*)));
 
     saveButton = new QPushButton("SAVE", this);
-    //saveButton->setGeometry(480, 590, 300, 40);
-    saveButton->setMinimumSize(200, 40);
+    saveButton->setMinimumSize(50, 40);
     saveButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     saveButton->setFont(QFont("SF Pro Black", 10));
     connect(saveButton, SIGNAL(clicked()), this, SLOT(saveNotes()));
 
     backButton = new QPushButton("BACK", this);
-    //backButton->setGeometry(20, 590, 240, 40);
-    backButton->setMinimumSize(200, 40);
+    backButton->setMinimumSize(50, 40);
     backButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     backButton->setFont(QFont("SF Pro Black", 10));
     connect(backButton, SIGNAL(clicked()), this, SLOT(toMainWindow()));
 
     removeButton = new QPushButton("REMOVE", this);
-    //removeButton->setGeometry(280, 590, 185, 40);
-    removeButton->setMinimumSize(200, 40);
+    removeButton->setMinimumSize(50, 40);
     removeButton->setStyleSheet( " background-color: #444444; color: #ffffff; border-width: 2px; border-style: solid; border-radius: 10px; border-color: #444444; alternate-background-color: #303030;" );
     removeButton->setFont(QFont("SF Pro Black", 10));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(removeNote()));
@@ -125,12 +122,17 @@ Notes::Notes(QMainWindow *parent) :
 
 
 Notes::~Notes() {
+    QSettings settings("Notes", "Notes");
+    settings.setValue("geometry", saveGeometry());
     delete ui;
 }
 
 void Notes::toMainWindow() {
     QString text = noteEdit->toPlainText();
     if(text.isEmpty()) {
+        QSettings settings("Notes", "Notes");
+        settings.setValue("geometry", saveGeometry());
+
         close();
         MainWindow *mainWindow = new MainWindow(this);
         mainWindow->setWindowIcon(QIcon("://home.svg"));
@@ -260,13 +262,5 @@ void Notes::removeNote() {
     } else {
         qDebug() << "Error deleting data:" << query.lastError().text();
         statusBar->showMessage(query.lastError().text());
-    }
-}
-
-
-void Notes::keyPressEvent(QKeyEvent *e) {
-    if(e->key() == Qt::Key_Control+Qt::Key_S) {
-        qDebug() << "CTRL+S pressed";
-        Notes::saveNotes();
     }
 }

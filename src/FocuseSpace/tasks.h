@@ -1,3 +1,6 @@
+#ifndef TASKS_H
+#define TASKS_H
+
 #include <QMainWindow>
 #include <QWidget>
 #include <QPushButton>
@@ -9,12 +12,19 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QStatusBar>
+#include <QSettings>
 
-class Tasks : public QMainWindow {
+QT_BEGIN_NAMESPACE
+namespace Ui { class Tasks; }
+QT_END_NAMESPACE
+
+class Tasks : public QMainWindow
+{
     Q_OBJECT
 
 public:
-    Tasks(QMainWindow *parent = nullptr);
+    explicit Tasks(QMainWindow *parent = nullptr);
+    ~Tasks();
 
 private slots:
     void addTask();
@@ -36,4 +46,9 @@ private:
     QPushButton *removeButton;
     QPushButton *clearTask;
     QPushButton *backButton;
+
+    Ui::Tasks *ui;
+    Tasks *tasks;
 };
+
+#endif
