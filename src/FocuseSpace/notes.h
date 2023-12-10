@@ -13,6 +13,8 @@
 #include <QKeyEvent>
 #include <QDebug>
 #include <QStatusBar>
+#include <QSettings>
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Notes; }
@@ -33,7 +35,6 @@ private slots:
     void doubleClick(QListWidgetItem*);
 
 protected:
-    void keyPressEvent(QKeyEvent *e) override;
 
 private:
     QStatusBar *statusBar;
